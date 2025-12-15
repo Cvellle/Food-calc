@@ -7,7 +7,8 @@ export const fetchMeals = createAsyncThunk<
   {rejectValue: string}
 >('meals/fetchMeals', async (_, {rejectWithValue}) => {
   try {
-    const res = await fetch('http://postgre-sql-1.vercel.app/meals/1');
+    const res = await fetch('api/meals');
+    // const res = await fetch('http://postgre-sql-1.vercel.app/');
 
     if (!res.ok) throw new Error('Failed');
 

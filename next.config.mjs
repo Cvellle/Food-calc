@@ -15,10 +15,11 @@ const withBundleAnalyzer = createBundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  trailingSlash: process.env.NEXT_PUBLIC_USE_CASE === 'trailing-slash',
-  basePath:
-    process.env.NEXT_PUBLIC_USE_CASE === 'base-path' ? '/base/path' : undefined,
-  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx']
+  appDir: true,
+  trailingSlash: false
+  // other config options here, e.g.
+  // basePath: process.env.NEXT_PUBLIC_USE_CASE === 'base-path' ? '/base/path' : undefined,
+  // pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx']
 };
 
 export default withNextIntl(withMdx(withBundleAnalyzer(nextConfig)));
