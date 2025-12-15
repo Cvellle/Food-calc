@@ -1,7 +1,7 @@
-export default function LocaleNotFound() {
-  return (
-    <div className="p-6 text-gray-700">
-      <h2 className="text-2xl font-bold">404 - Page Not Found</h2>
-    </div>
-  );
+import {useTranslations} from 'next-intl';
+import PageLayout from '../../components/PageLayout';
+
+export default function NotFound() {
+  const t = useTranslations('NotFound');
+  return <PageLayout title={t('title')} />;
 }

@@ -1,0 +1,71 @@
+{
+    "nutrients": [
+        {
+            "nutrient": "calories",
+            "unit": "kcal",
+            "total": 431.9
+        },
+        {
+            "nutrient": "protein",
+            "unit": "g",
+            "total": 12.158000000000001
+        },
+        {
+            "nutrient": "carbohydrates",
+            "unit": "g",
+            "total": 104.47999999999999
+        },
+        {
+            "nutrient": "sugars",
+            "unit": "g",
+            "total": 46.525999999999996
+        },
+        {
+            "nutrient": "fiber",
+            "unit": "g",
+            "total": 16.259999999999998
+        },
+        {
+            "nutrient": "total fat",
+            "unit": "g",
+            "total": 2.5170000000000003
+        },
+        {
+            "nutrient": "iron",
+            "unit": "mg",
+            "total": 3.173
+        },
+        {
+            "nutrient": "vitamin C",
+            "unit": "mg",
+            "total": 216.83
+        },
+        {
+            "nutrient": "potassium",
+            "unit": "mg",
+            "total": 2029.4
+        },
+        {
+            "nutrient": "vitamin A",
+            "unit": "µg",
+            "total": 140.7
+        }
+    ],
+    "items": [
+        {
+            "name": "banana",
+            "quantity": 3,
+            "measurement": "unit"
+        },
+        {
+            "name": "spinach",
+            "quantity": 30,
+            "measurement": "grams"
+        },
+        {
+            "name": "broccoli",
+            "quantity": 200,
+            "measurement": "grams"
+        }
+    ]
+}

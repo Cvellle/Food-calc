@@ -1,28 +1,71 @@
-import { NextIntlClientProvider } from 'next-intl';
-import { notFound } from 'next/navigation';
+import {Metadata} from 'next';
+import {Inter} from 'next/font/google';
+import {notFound} from 'next/navigation';
+import {Locale, NextIntlClientProvider, hasLocale} from 'next-intl';
+import {
+  getFormatter,
+  getNow,
+  getTimeZone,
+  getTranslations
+} from 'next-intl/server';
+import {routing} from '@/i18n/routing';
+import Navigation from '../../components/Navigation';
+
+const inter = Inter({subsets: ['latin']});
+
+export async function generateMetadata(
+  props: Omit<LayoutProps<'/[locale]'>, 'children'>
+): Promise<Metadata> {
+  const params = await props.params;
+  const locale = params.locale as Locale;
+
+  const t = await getTranslations({locale, namespace: 'LocaleLayout'});
+  const formatter = await getFormatter({locale});
+  const now = await getNow({locale});
+  const timeZone = await getTimeZone({locale});
+
+  const base = new URL('http://localhost:3000');
+  if (process.env.NEXT_PUBLIC_USE_CASE === 'base-path') {
+    base.pathname = '/base/path';
+  }
+
+  return {
+    metadataBase: base,
+    title: t('title'),
+    description: t('description'),
+    other: {
+      currentYear: formatter.dateTime(now, {year: 'numeric'}),
+      timeZone
+    }
+  };
+}
 
 export default async function LocaleLayout({
   children,
-  params: { locale },
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
-  let messages;
-  try {
-    console.log(123, 'messages');
-    messages = (await import(`../../messages/${locale}.json`)).default;
-    console.log(123, messages);
-  } catch {
+  params
+}: LayoutProps<'/[locale]'>) {
+  const {locale} = await params;
+
+  // Ensure that the incoming `locale` is valid
+  if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
   return (
-    <html lang={locale}>
-      <body className="p-6 bg-gray-50 text-gray-900">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+    <html className={inter.className} lang={locale}>
+      <body>
+        <div
+          style={{
+            padding: 24,
+            fontFamily: 'system-ui, sans-serif',
+            lineHeight: 1.5
+          }}
+        >
+          <NextIntlClientProvider>
+            <Navigation />
+            {children}
+          </NextIntlClientProvider>
+        </div>
       </body>
     </html>
   );

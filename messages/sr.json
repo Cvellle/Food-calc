@@ -1,0 +1,66 @@
+{
+    "ApiRoute": {
+        "hello": "Zdravo {name}!"
+    },
+    "AsyncComponent": {
+        "basic": "AsyncComponent",
+        "markup": "Markup sa <important>podebljanim sadržajem</important>",
+        "rich": "Ovo je <important>bogat</important> tekst."
+    },
+    "Client": {
+        "description": "Ova stranica se hidrira na klijentskoj strani.",
+        "title": "Klijent"
+    },
+    "ClientCounter": {
+        "count": "Trenutni broj: {count}",
+        "increment": "Povećaj"
+    },
+    "Counter": {
+        "count": "Trenutni broj:",
+        "increment": "Povećaj"
+    },
+    "Index": {
+        "description": "Ovo je početna stranica.",
+        "rich": "Ovo je <b>bogat</b> tekst.",
+        "title": "Početna",
+        "missing": "Ovaj ključ nedostaje u nekim lokalima"
+    },
+    "JustIn": {
+        "title": "Upravo stiglo"
+    },
+    "LocaleLayout": {
+        "description": "Ovo je primer korišćenja next-intl u `app` direktorijumu.",
+        "title": "next-intl primer"
+    },
+    "LocaleSwitcher": {
+        "switchLocale": "Promeni jezik",
+        "switchLocale_OLD": "Prebaci na to {locale, select, it {Italijanski} en {Engleski} sr {Srpski} other {Unknown}}"
+    },
+    "Navigation": {
+        "about": "O nama (MDX)",
+        "client": "Klijentska stranica",
+        "home": "Početna",
+        "nested": "Ugnježdena stranica",
+        "newsArticle": "Novinski članak #{articleId}"
+    },
+    "Nested": {
+        "description": "Ovo je ugnježdena stranica.",
+        "title": "Ugnježdena"
+    },
+    "NewsArticle": {
+        "title": "Novinski članak #{articleId}"
+    },
+    "NotFound": {
+        "title": "Stranica nije pronađena (404)"
+    },
+    "OpenGraph": {
+        "title": "next-intl primer"
+    },
+    "ServerActions": {
+        "item": "Stavka #{id}"
+    },
+    "ZodFormExample": {
+        "task": "Unesite zadatak",
+        "taskEmpty": "Molimo unesite zadatak."
+    }
+}

@@ -1,0 +1,66 @@
+{
+    "ApiRoute": {
+        "hello": "Ciao {name}!"
+    },
+    "AsyncComponent": {
+        "basic": "AsyncComponent",
+        "markup": "Markup con <important>contenuto in grassetto</important>",
+        "rich": "Questo è un testo <important>ricco</important>."
+    },
+    "Client": {
+        "description": "Questa pagina viene idratata lato client.",
+        "title": "Client"
+    },
+    "ClientCounter": {
+        "count": "Conteggio attuale: {count}",
+        "increment": "Incrementa"
+    },
+    "Counter": {
+        "count": "Conteggio attuale:",
+        "increment": "Incrementa"
+    },
+    "Index": {
+        "description": "Questa è la home page.",
+        "rich": "Questo è un testo <b>ricco</b>.",
+        "title": "Home",
+        "missing": "Questa chiave manca in alcune lingue"
+    },
+    "JustIn": {
+        "title": "Appena arrivato"
+    },
+    "LocaleLayout": {
+        "description": "Questo è un esempio di utilizzo di next-intl nella directory `app`.",
+        "title": "Esempio next-intl"
+    },
+    "LocaleSwitcher": {
+        "switchLocale": "Cambia la lingua",
+        "switchLocale_OLD": "Passa a to {locale, select, it {Italiano} en {Inglese} sr {Serbp} other {Unknown}}"
+    },
+    "Navigation": {
+        "about": "Informazioni (MDX)",
+        "client": "Pagina Client",
+        "home": "Home",
+        "nested": "Pagina annidata",
+        "newsArticle": "Articolo news #{articleId}"
+    },
+    "Nested": {
+        "description": "Questa è una pagina annidata.",
+        "title": "Annidata"
+    },
+    "NewsArticle": {
+        "title": "Articolo news #{articleId}"
+    },
+    "NotFound": {
+        "title": "Questa pagina non è stata trovata (404)"
+    },
+    "OpenGraph": {
+        "title": "Esempio next-intl"
+    },
+    "ServerActions": {
+        "item": "Elemento #{id}"
+    },
+    "ZodFormExample": {
+        "task": "Inserisci un compito",
+        "taskEmpty": "Per favore inserisci un compito."
+    }
+}

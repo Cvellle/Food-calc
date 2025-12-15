@@ -1,27 +1,48 @@
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import {getTranslations} from 'next-intl/server';
+import PageLayout from '../../components/PageLayout';
 
-export default function HomePage() {
- 
+import {getMeals} from '@/services/meals';
+
+type Props = {
+  searchParams: Record<string, string>;
+};
+
+export default async function Index({searchParams}: Props) {
+  const t = await getTranslations('Index');
+
+  const posts = await getMeals();
 
   return (
-    <main className="p-6 space-y-4">
-      asd
-      {/* <h1 className="text-3xl font-bold">{t('title')} ({locale})</h1>
-      <ul className="list-disc pl-5">
-        {posts.map(post => (
-          <li key={post.slug}>
-            <Link href={`/${locale}/posts/${post.slug}`} className="text-blue-500 hover:underline">
-              {post.title}
-            </Link>
-          </li>
+    <PageLayout title={t('title')}>
+      <p>{t('description')}</p>
+
+      <div>
+        <p>This meal contains:</p>
+        {posts?.nutrients?.map((post) => (
+          <div key={post.nutrient}>
+            <p>{post.nutrient}</p>
+            <p>
+              {post.total.toFixed(2)} {post.unit}
+            </p>
+          </div>
         ))}
-      </ul>
-      <p>
-        <Link href={`/${locale}/posts/hello-world`} className="text-green-500 underline">
-          {t('postsLink')}
+      </div>
+
+      {/* <p data-testid="CurrentTimeRelative">{format.relativeTime(now)}</p>      
+      <div>
+        <Link href={{pathname: '/', query: {test: true}}}>
+          Go to home with query param
         </Link>
-      </p> */}
-    </main>
+      </div>
+      <ClientRouter />
+      <ClientLink href="/">Link on client without provider</ClientLink>
+      <MessagesAsPropsCounter />  
+      <p data-testid="SearchParams">{JSON.stringify(searchParams, null, 2)}</p> */}
+      {/* <p data-testid="HasTitle">{JSON.stringify(t.has('title'))}</p> */}
+
+      {/* <Image alt="" height={77} priority src="/assets/image.jpg" width={128} /> */}
+      {/* <AsyncComponent /> */}
+      {/* <DropdownMenu /> */}
+    </PageLayout>
   );
 }
