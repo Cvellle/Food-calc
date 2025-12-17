@@ -23,17 +23,14 @@ export const createMealAsync = async (bodyProps: {
   const data = await res.json();
 
   // TensorFlow
-  //   const nutrients = await aggregateNutrients(meal.id);
-  //   const features = normalizeNutrients(nutrients);
   const score = await runPrediction(data.id);
-
   await updateMealHealthScore(data.id, score);
 
   return data;
 };
 
 export async function updateMealHealthScore(mealId: number, score: number) {
-  const res = await fetch(`http://localhost:3001/meals/${mealId}/score`, {
+  const res = await fetch(`${endpoint}/meals/${mealId}/score`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
