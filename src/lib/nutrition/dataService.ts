@@ -1,4 +1,5 @@
 import {endpoint} from '../../../config/endpoint';
+import {MealDetails} from './types';
 
 export interface Nutrient {
   nutrient: string;
@@ -7,8 +8,8 @@ export interface Nutrient {
 }
 
 export async function fetchAllNutrients(mealId: number): Promise<Nutrient[]> {
-  const res = await fetch(`${endpoint}/${mealId}/nutrients`);
+  const res = await fetch(`${endpoint}/meals/${mealId}`);
   if (!res.ok) throw new Error('Failed to fetch nutrients');
-  const data: Nutrient[] = await res.json();
-  return data;
+  const data: any = await res.json();
+  return data.nutrients;
 }

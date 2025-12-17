@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import {endpoint} from '../../../../../config/endpoint';
+import {createMealAsync} from '@/services/meal.service';
 
 type Item = {
   itemId: number | '';
@@ -52,25 +53,15 @@ export default function CreateMealPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${endpoint}/meals`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          name,
-          items: items.map(({itemId, quantity, measurement}) => ({
-            itemId: Number(itemId),
-            quantity: Number(quantity),
-            measurement
-          }))
-        })
-      });
-
-      if (!res.ok) {
-        const json = await res.json();
-        throw new Error(json.error || 'Failed to create meal');
-      }
-
-      const data = await res.json();
+      const payload = {
+        name,
+        items: items.map(({itemId, quantity, measurement}) => ({
+          itemId: Number(itemId),
+          quantity: Number(quantity),
+          measurement
+        }))
+      };
+      const data = await createMealAsync(payload);
       setSuccess(`Meal created with id: ${data.id}`);
       setName('');
       setItems([{itemId: '', quantity: '', measurement: 'grams'}]);

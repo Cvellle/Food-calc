@@ -1,6 +1,6 @@
 import {Nutrient, NutrientKey, NUTRIENTS} from './types';
 
-export function mapNutrientsToFeatures(mealNutrients: Nutrient[]): number[] {
+export function normalizeNutrients(mealNutrients: Nutrient[]): number[] {
   return (Object.keys(NUTRIENTS) as NutrientKey[]).map((key) => {
     const {min, max} = NUTRIENTS[key];
     const mealValue =
