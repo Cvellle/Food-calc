@@ -15,11 +15,17 @@ const withBundleAnalyzer = createBundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/meals',
+        destination: '/api/meals'
+      }
+    ];
+  },
   appDir: true,
   trailingSlash: false
-  // other config options here, e.g.
-  // basePath: process.env.NEXT_PUBLIC_USE_CASE === 'base-path' ? '/base/path' : undefined,
-  // pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx']
+  // other options...
 };
 
 export default withNextIntl(withMdx(withBundleAnalyzer(nextConfig)));

@@ -63,7 +63,9 @@ export default function Navbar() {
     <div ref={containerRef} className="w-full border-b bg-white">
       <nav className="flex justify-between max-w-6xl mx-auto px-4 py-4 items-center gap-6 relative">
         {/* Logo */}
-        <div className="font-bold text-xl">Food calc</div>
+        <Link href={'/'} className="font-bold text-xl">
+          Food calc
+        </Link>
 
         {/* DESKTOP MENU */}
         <div className="hidden md:flex items-center gap-6">

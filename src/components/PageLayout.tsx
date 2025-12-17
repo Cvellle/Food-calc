@@ -7,7 +7,7 @@ type Props = {
 
 export default function PageLayout({children, title}: Props) {
   return (
-    <div style={{maxWidth: 510}}>
+    <div>
       <h1>{title}</h1>
       {children}
     </div>

@@ -1,18 +1,12 @@
-// src/lib/features/meals/types.ts
-
-export interface Nutrient {
-  nutrient: string;
-  unit: string;
-  total: number;
-}
-
-export interface Item {
+export interface MealListItem {
+  id: number;
   name: string;
-  quantity: number;
-  measurement: string;
+  ingredients_preview: string;
 }
 
-export interface MealsResponse {
-  nutrients: Nutrient[];
-  items: Item[];
+export interface MealDetails {
+  id: number;
+  name: string;
+  nutrients: any[];
+  items: any[];
 }
