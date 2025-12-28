@@ -35,9 +35,7 @@ export const NAV_ITEMS: NavItem[] = [
       }
     ]
   },
-  {label: 'About', type: 'link', href: '/about'},
-  {label: 'Contact', type: 'link', href: '/contact'},
-  {label: 'Blog', type: 'link', href: '/blog'}
+  {label: 'About', type: 'link', href: '/about'}
 ];
 
 export default function Navbar() {

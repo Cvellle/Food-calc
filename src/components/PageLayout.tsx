@@ -8,7 +8,7 @@ type Props = {
 export default function PageLayout({children, title}: Props) {
   return (
     <div>
-      <h1>{title}</h1>
+      {/* <h1>{title}</h1> */}
       {children}
     </div>
   );

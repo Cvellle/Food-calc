@@ -1,0 +1,126 @@
+# Tracciatore di Pasti e Nutrienti
+
+<span className="text-lg text-gray-600 mt-4">
+  Analizza i pasti, comprendi gli ingredienti e valuta l’assunzione dei
+  nutrienti rispetto ai valori giornalieri o personalizzati.
+</span>
+
+---
+
+## Come funziona
+
+<div className="grid gap-6 mt-6 md:grid-cols-3">
+  <div className="rounded-xl border p-5">
+    <h3 className="font-semibold text-lg">1. Crea i pasti</h3>
+    <p className="text-sm text-gray-600 mt-2">
+      Ogni pasto è composto da più ingredienti con quantità precise.
+    </p>
+  </div>
+
+<div className="rounded-xl border p-5">
+  <h3 className="font-semibold text-lg">2. Somma i nutrienti</h3>
+  <p className="text-sm text-gray-600 mt-2">
+    I valori nutrizionali degli ingredienti vengono aggregati per pasto o per
+    giorno.
+  </p>
+</div>
+
+  <div className="rounded-xl border p-5">
+    <h3 className="font-semibold text-lg">3. Valuta i limiti</h3>
+    <p className="text-sm text-gray-600 mt-2">
+      I totali vengono confrontati con intervalli consigliati per individuare eccessi o carenze.
+    </p>
+  </div>
+</div>
+
+---
+
+## Esempio di pasto
+
+### Pollo alla griglia con riso
+
+<table className="mt-4 w-full border-collapse text-sm">
+  <thead>
+    <tr className="border-b">
+      <th className="py-2 text-left">Ingrediente</th>
+      <th className="py-2 text-left">Quantità</th>
+      <th className="py-2 text-right">Calorie</th>
+      <th className="py-2 text-right">Proteine (g)</th>
+      <th className="py-2 text-right">Carboidrati (g)</th>
+      <th className="py-2 text-right">Grassi (g)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="border-b">
+      <td className="py-2">Petto di pollo</td>
+      <td className="py-2">200 g</td>
+      <td className="py-2 text-right">330</td>
+      <td className="py-2 text-right">62</td>
+      <td className="py-2 text-right">0</td>
+      <td className="py-2 text-right">7</td>
+    </tr>
+    <tr>
+      <td className="py-2">Riso bianco</td>
+      <td className="py-2">150 g</td>
+      <td className="py-2 text-right">195</td>
+      <td className="py-2 text-right">4</td>
+      <td className="py-2 text-right">42</td>
+      <td className="py-2 text-right">1</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Riepilogo dei nutrienti
+
+<table className="mt-4 w-full border-collapse text-sm">
+  <thead>
+    <tr className="border-b">
+      <th className="py-2 text-left">Nutriente</th>
+      <th className="py-2 text-right">Assunto</th>
+      <th className="py-2 text-right">Consigliato</th>
+      <th className="py-2 text-center">Stato</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="border-b">
+      <td className="py-2">Calorie</td>
+      <td className="py-2 text-right">525 kcal</td>
+      <td className="py-2 text-right">2000 kcal</td>
+      <td className="py-2 text-center text-green-600">Nella norma</td>
+    </tr>
+    <tr className="border-b">
+      <td className="py-2">Proteine</td>
+      <td className="py-2 text-right">66 g</td>
+      <td className="py-2 text-right">50–150 g</td>
+      <td className="py-2 text-center text-green-600">Nella norma</td>
+    </tr>
+    <tr>
+      <td className="py-2">Carboidrati</td>
+      <td className="py-2 text-right">42 g</td>
+      <td className="py-2 text-right">225–325 g</td>
+      <td className="py-2 text-center text-yellow-600">Sotto il limite</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Analisi nel tempo
+
+<ul className="mt-4 list-disc pl-6 text-gray-700">
+  <li>Analisi per pasto</li>
+  <li>Totali giornalieri</li>
+  <li>Medie settimanali</li>
+  <li>Intervalli personalizzati</li>
+</ul>
+
+---
+
+## Perché è importante
+
+<p className="mt-4 text-gray-700">
+  Comprendere l’impatto degli ingredienti sull’assunzione totale di nutrienti
+  aiuta a evitare carenze, eccessi e a costruire abitudini alimentari sane.
+</p>

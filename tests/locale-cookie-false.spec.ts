@@ -11,6 +11,6 @@ it('never sets a cookie', async ({page}) => {
   await expectNoCookie();
 
   await page.getByRole('link', {name: 'Switch to German'}).click();
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
   await expectNoCookie();
 });

@@ -12,7 +12,6 @@ export default async function Index({searchParams}: Props) {
 
   return (
     <PageLayout title={t('title')}>
-      <p>{t('description')}</p>
       <ClientIndex />
     </PageLayout>
   );

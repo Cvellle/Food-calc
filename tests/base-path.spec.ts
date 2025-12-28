@@ -10,10 +10,10 @@ it('updates the cookie correctly', async ({page}) => {
   await page.getByRole('link', {name: 'Home'}).click();
   await page.getByRole('link', {name: 'Switch to German'}).click();
 
-  await expect(page).toHaveURL('/base/path/de');
+  await expect(page).toHaveURL('/base/pathit');
   assertLocaleCookieValue(page, 'it', {path: '/base/path'});
   await page.getByRole('button', {name: 'Go to nested page'}).click();
-  await expect(page).toHaveURL('/base/path/de/verschachtelt');
+  await expect(page).toHaveURL('/base/pathit/verschachtelt');
   await page.getByRole('link', {name: 'Start'}).click();
   await page.getByRole('link', {name: 'Zu Englisch wechseln'}).click();
 
@@ -39,8 +39,8 @@ it('returns the correct canonical URL when using getPathname', async ({
   await page.goto('/base/path/news/1');
   await expect(getCanonicalPathname()).resolves.toBe('/base/path/news/1');
 
-  await page.goto('/base/path/de/neuigkeiten/1');
+  await page.goto('/base/pathit/neuigkeiten/1');
   await expect(getCanonicalPathname()).resolves.toBe(
-    '/base/path/de/neuigkeiten/1'
+    '/base/pathit/neuigkeiten/1'
   );
 });

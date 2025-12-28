@@ -11,7 +11,7 @@ it('can use config based on the default locale on an unknown domain', async ({
 
   await page.goto('/');
   await page.getByRole('link', {name: 'Switch to German'}).click();
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
 });
 
 it('can use a secondary locale unprefixed if the domain has specified it as the default locale', async () => {

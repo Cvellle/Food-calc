@@ -1,0 +1,125 @@
+# Praćenje Obroka i Nutrijenata
+
+<span className="text-lg text-gray-600 mt-4">
+  Prati obroke, razumi sastojke i proceni unos nutrijenata u odnosu na dnevne
+  ili prilagođene preporuke.
+</span>
+
+---
+
+## Kako funkcioniše
+
+<div className="grid gap-6 mt-6 md:grid-cols-3">
+  <div className="rounded-xl border p-5">
+    <h3 className="font-semibold text-lg">1. Kreiranje obroka</h3>
+    <p className="text-sm text-gray-600 mt-2">
+      Svaki obrok se sastoji od više sastojaka sa preciznim količinama.
+    </p>
+  </div>
+
+<div className="rounded-xl border p-5">
+  <h3 className="font-semibold text-lg">2. Sabiranje nutrijenata</h3>
+  <p className="text-sm text-gray-600 mt-2">
+    Nutritivne vrednosti sastojaka se sabiraju po obroku ili po danu.
+  </p>
+</div>
+
+  <div className="rounded-xl border p-5">
+    <h3 className="font-semibold text-lg">3. Provera granica</h3>
+    <p className="text-sm text-gray-600 mt-2">
+      Ukupan unos se poredi sa preporučenim rasponima radi otkrivanja viška ili manjka.
+    </p>
+  </div>
+</div>
+
+---
+
+## Primer obroka
+
+### Grilovana piletina sa pirinčem
+
+<table className="mt-4 w-full border-collapse text-sm">
+  <thead>
+    <tr className="border-b">
+      <th className="py-2 text-left">Sastojak</th>
+      <th className="py-2 text-left">Količina</th>
+      <th className="py-2 text-right">Kalorije</th>
+      <th className="py-2 text-right">Proteini (g)</th>
+      <th className="py-2 text-right">Ugljeni hidrati (g)</th>
+      <th className="py-2 text-right">Masti (g)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="border-b">
+      <td className="py-2">Pileća prsa</td>
+      <td className="py-2">200 g</td>
+      <td className="py-2 text-right">330</td>
+      <td className="py-2 text-right">62</td>
+      <td className="py-2 text-right">0</td>
+      <td className="py-2 text-right">7</td>
+    </tr>
+    <tr>
+      <td className="py-2">Beli pirinač</td>
+      <td className="py-2">150 g</td>
+      <td className="py-2 text-right">195</td>
+      <td className="py-2 text-right">4</td>
+      <td className="py-2 text-right">42</td>
+      <td className="py-2 text-right">1</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Pregled nutrijenata
+
+<table className="mt-4 w-full border-collapse text-sm">
+  <thead>
+    <tr className="border-b">
+      <th className="py-2 text-left">Nutrijent</th>
+      <th className="py-2 text-right">Uneto</th>
+      <th className="py-2 text-right">Preporučeno</th>
+      <th className="py-2 text-center">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="border-b">
+      <td className="py-2">Kalorije</td>
+      <td className="py-2 text-right">525 kcal</td>
+      <td className="py-2 text-right">2000 kcal</td>
+      <td className="py-2 text-center text-green-600">U granicama</td>
+    </tr>
+    <tr className="border-b">
+      <td className="py-2">Proteini</td>
+      <td className="py-2 text-right">66 g</td>
+      <td className="py-2 text-right">50–150 g</td>
+      <td className="py-2 text-center text-green-600">U granicama</td>
+    </tr>
+    <tr>
+      <td className="py-2">Ugljeni hidrati</td>
+      <td className="py-2 text-right">42 g</td>
+      <td className="py-2 text-right">225–325 g</td>
+      <td className="py-2 text-center text-yellow-600">Ispod granice</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Analiza po vremenu
+
+<ul className="mt-4 list-disc pl-6 text-gray-700">
+  <li>Analiza po obroku</li>
+  <li>Dnevni zbir</li>
+  <li>Nedeljni prosek</li>
+  <li>Prilagođeni vremenski periodi</li>
+</ul>
+
+---
+
+## Zašto je ovo važno
+
+<p className="mt-4 text-gray-700">
+  Razumevanje kako sastojci utiču na ukupan unos nutrijenata pomaže u
+  sprečavanju dugoročnih nedostataka, viškova i u izgradnji zdravih navika.
+</p>

@@ -48,7 +48,7 @@ it('redirects to a matched locale at the root for non-default locales', async ({
   const page = await context.newPage();
 
   await page.goto('/');
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
   page.getByRole('heading', {name: 'Start'});
 });
 
@@ -59,7 +59,7 @@ it('redirects to a matched locale for an invalid cased non-default locale', asyn
   const page = await context.newPage();
 
   await page.goto('/DE');
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
   page.getByRole('heading', {name: 'Start'});
 });
 
@@ -70,7 +70,7 @@ it('redirects to a matched locale for an invalid cased non-default locale in a n
   const page = await context.newPage();
 
   await page.goto('/DE/verschachtelt');
-  await expect(page).toHaveURL('/de/verschachtelt');
+  await expect(page).toHaveURL('it/verschachtelt');
   page.getByRole('heading', {name: 'Verschachtelt'});
 });
 
@@ -113,7 +113,7 @@ it('redirects a more specific locale to a more generic one', async ({
   const page = await context.newPage();
 
   await page.goto('/');
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
   page.getByRole('heading', {name: 'Start'});
 });
 
@@ -126,8 +126,8 @@ it('does not redirect on the root if the default locale is matched', async ({
 });
 
 it('supports unprefixed routing for the default locale', async ({page}) => {
-  await page.goto('/de/verschachtelt');
-  await expect(page).toHaveURL('/de/verschachtelt');
+  await page.goto('it/verschachtelt');
+  await expect(page).toHaveURL('it/verschachtelt');
   page.getByRole('heading', {name: 'Verschachtelt'});
 });
 
@@ -142,7 +142,7 @@ it('redirects unprefixed paths for non-default locales', async ({browser}) => {
   const page = await context.newPage();
 
   await page.goto('/nested');
-  await expect(page).toHaveURL('/de/verschachtelt');
+  await expect(page).toHaveURL('it/verschachtelt');
   page.getByRole('heading', {name: 'Verschachtelt'});
 });
 
@@ -157,15 +157,15 @@ it('prioritizes static routes over dynamic routes for the default locale', async
 it('prioritizes static routes over dynamic routes for non-default locales', async ({
   page
 }) => {
-  await page.goto('/de/neuigkeiten/aktuell');
-  await expect(page).toHaveURL('/de/neuigkeiten/aktuell');
+  await page.goto('it/neuigkeiten/aktuell');
+  await expect(page).toHaveURL('it/neuigkeiten/aktuell');
   await expect(
     page.getByRole('heading', {name: 'Gerade eingetroffen'})
   ).toBeVisible();
 });
 
 it('sets the `path` for the cookie', async ({page}) => {
-  await page.goto('/de/client');
+  await page.goto('it/client');
 
   // It's important that the cookie is set on the root path
   // https://www.rfc-editor.org/rfc/rfc6265#section-4.1.2.4
@@ -173,13 +173,13 @@ it('sets the `path` for the cookie', async ({page}) => {
 });
 
 it('remembers the last locale', async ({page}) => {
-  await page.goto('/de');
+  await page.goto('it');
 
   // Wait for the cookie to be set on the client side
   await assertLocaleCookieValue(page, 'it');
 
   await page.goto('/');
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
 });
 
 it('sets the `lang` attribute on `html`', async ({page}) => {
@@ -191,7 +191,7 @@ it('can be used in the head', async ({page}) => {
   await page.goto('/en');
   await expect(page).toHaveTitle('next-intl example');
 
-  await page.goto('/de');
+  await page.goto('it');
   await expect(page).toHaveTitle('next-intl Beispiel');
 });
 
@@ -199,7 +199,7 @@ it('can be used to localize the page', async ({page}) => {
   await page.goto('/en');
   page.locator('text=This is the home page.');
 
-  await page.goto('/de');
+  await page.goto('it');
   page.locator('text=Das ist die Startseite.');
 });
 
@@ -272,9 +272,9 @@ it('can use `Link` with an object as `href`', async ({page}) => {
 it('can use `Link` to link to the root of another language', async ({page}) => {
   await page.goto('/');
   const link = page.getByRole('link', {name: 'Switch to German'});
-  await expect(link).toHaveAttribute('href', '/de');
+  await expect(link).toHaveAttribute('href', 'it');
   await link.click();
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
   await page.getByRole('link', {name: 'Zu Englisch wechseln'}).click();
   await expect(page).toHaveURL('/');
 });
@@ -317,7 +317,7 @@ it('keeps the locale cookie updated when changing the locale and uses soft navig
   await assertLocaleCookieValue(page, undefined);
   await linkDe.click();
 
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('it');
   await assertLocaleCookieValue(page, 'it');
 
   const linkEn = page.getByRole('link', {name: 'Zu Englisch wechseln'});
@@ -341,10 +341,10 @@ it('can use `Link` in client components without using a provider', async ({
     page.getByRole('link', {name: 'Link on client without provider'})
   ).toHaveAttribute('href', '/');
 
-  await page.goto('/de');
+  await page.goto('it');
   await expect(
     page.getByRole('link', {name: 'Link on client without provider'})
-  ).toHaveAttribute('href', '/de');
+  ).toHaveAttribute('href', 'it');
 });
 
 it('can use `Link` on the client', async ({page}) => {
@@ -354,10 +354,10 @@ it('can use `Link` on the client', async ({page}) => {
     '/'
   );
 
-  await page.goto('/de/client');
+  await page.goto('it/client');
   await expect(page.getByRole('link', {name: 'Go to home'})).toHaveAttribute(
     'href',
-    '/de'
+    'it'
   );
 });
 
@@ -373,7 +373,7 @@ it('prefixes as necessary with `Link`', async ({page}) => {
   );
   await expect(
     page.getByRole('link', {name: 'Switch to German'})
-  ).toHaveAttribute('href', '/de');
+  ).toHaveAttribute('href', 'it');
 
   await page.goto('/en');
   await expect(page.getByRole('link', {name: /^Home$/})).toHaveAttribute(
@@ -386,16 +386,16 @@ it('prefixes as necessary with `Link`', async ({page}) => {
   );
   await expect(
     page.getByRole('link', {name: 'Switch to German'})
-  ).toHaveAttribute('href', '/de');
+  ).toHaveAttribute('href', 'it');
 
-  await page.goto('/de');
+  await page.goto('it');
   await expect(page.getByRole('link', {name: /^Start$/})).toHaveAttribute(
     'href',
-    '/de'
+    'it'
   );
   await expect(page.getByRole('link', {name: 'Client-Seite'})).toHaveAttribute(
     'href',
-    '/de/client'
+    'it/client'
   );
   await expect(
     page.getByRole('link', {name: 'Zu Englisch wechseln'})
@@ -424,12 +424,12 @@ it('can use `usePathname`', async ({page}) => {
   await page.goto('/en/client');
   await expect(page.getByTestId('UnlocalizedPathname')).toHaveText('/client');
 
-  await page.goto('/de/client');
+  await page.goto('it/client');
   await expect(page.getByTestId('UnlocalizedPathname')).toHaveText('/client');
 });
 
 it('can use `usePathname` to get internal pathnames', async ({page}) => {
-  await page.goto('/de/verschachtelt');
+  await page.goto('it/verschachtelt');
   await expect(page.getByTestId('UnlocalizedPathname')).toHaveText('/nested');
 
   await page.goto('/en/nested');
@@ -445,7 +445,7 @@ it('returns the correct value from `usePathname` in the initial render', async (
   expect(await (await request.get('/client')).text()).toContain(
     '<p data-testid="UnlocalizedPathname">/client</p>'
   );
-  expect(await (await request.get('/de/client')).text()).toContain(
+  expect(await (await request.get('it/client')).text()).toContain(
     '<p data-testid="UnlocalizedPathname">/client</p>'
   );
 });
@@ -454,16 +454,16 @@ it('can use `redirect` in Server Components', async ({page}) => {
   await page.goto('/redirect');
   await expect(page).toHaveURL('/client');
 
-  await page.goto('/de/redirect');
-  await expect(page).toHaveURL('/de/client');
+  await page.goto('it/redirect');
+  await expect(page).toHaveURL('it/client');
 });
 
 it('can use `redirect` in Client Components', async ({page}) => {
   await page.goto('/client/redirect');
   await expect(page).toHaveURL('/client');
 
-  await page.goto('/de/client/redirect');
-  await expect(page).toHaveURL('/de/client');
+  await page.goto('it/client/redirect');
+  await expect(page).toHaveURL('it/client');
 });
 
 it('can navigate between sibling pages that share a parent layout', async ({
@@ -485,9 +485,9 @@ it('prefixes routes as necessary with the router', async ({page}) => {
   page.getByTestId('ClientRouter-link').click();
   await expect(page).toHaveURL('/nested');
 
-  await page.goto('/de');
+  await page.goto('it');
   page.getByTestId('ClientRouter-link').click();
-  await expect(page).toHaveURL('/de/verschachtelt');
+  await expect(page).toHaveURL('it/verschachtelt');
 });
 
 it('can set `now` and `timeZone` at runtime', async ({page}) => {
@@ -510,8 +510,8 @@ it('automatically inherits a time zone and locale on the client side when using 
 });
 
 it('keeps search params for directly matched pages', async ({page}) => {
-  await page.goto('/de?param=true');
-  await expect(page).toHaveURL('/de?param=true');
+  await page.goto('it?param=true');
+  await expect(page).toHaveURL('it?param=true');
   await expect(page.getByTestId('SearchParams')).toHaveText(
     '{ "param": "true" }'
   );
@@ -530,7 +530,7 @@ it('keeps search params for redirects', async ({browser}) => {
   const page = await context.newPage();
 
   await page.goto('/?param=true');
-  await expect(page).toHaveURL('/de?param=true');
+  await expect(page).toHaveURL('it?param=true');
   await expect(page.getByTestId('SearchParams')).toHaveText(
     '{ "param": "true" }'
   );
@@ -541,11 +541,11 @@ it('sets alternate links', async ({request}) => {
     return getAlternateLinks(await request.get(pathname));
   }
 
-  for (const pathname of ['/', '/en', '/de']) {
+  for (const pathname of ['/', '/en', 'it']) {
     expect(await getLinks(pathname)).toEqual(
       expect.arrayContaining([
         '<http://localhost:3000/>; rel="alternate"; hreflang="en"',
-        '<http://localhost:3000/de>; rel="alternate"; hreflang="de"',
+        '<http://localhost:3000it>; rel="alternate"; hreflang="de"',
         '<http://localhost:3000/spain>; rel="alternate"; hreflang="es"',
         '<http://localhost:3000/ja>; rel="alternate"; hreflang="ja"',
         '<http://localhost:3000/>; rel="alternate"; hreflang="x-default"'
@@ -553,11 +553,11 @@ it('sets alternate links', async ({request}) => {
     );
   }
 
-  for (const pathname of ['/nested', '/en/nested', '/de/nested']) {
+  for (const pathname of ['/nested', '/en/nested', 'it/nested']) {
     expect(await getLinks(pathname)).toEqual(
       expect.arrayContaining([
         '<http://localhost:3000/nested>; rel="alternate"; hreflang="en"',
-        '<http://localhost:3000/de/verschachtelt>; rel="alternate"; hreflang="de"',
+        '<http://localhost:3000it/verschachtelt>; rel="alternate"; hreflang="de"',
         '<http://localhost:3000/spain/anidada>; rel="alternate"; hreflang="es"',
         '<http://localhost:3000/ja/%E3%83%8D%E3%82%B9%E3%83%88>; rel="alternate"; hreflang="ja"',
         '<http://localhost:3000/nested>; rel="alternate"; hreflang="x-default"'
@@ -567,20 +567,20 @@ it('sets alternate links', async ({request}) => {
 });
 
 it('can use rewrites to localize pathnames', async ({page}) => {
-  await page.goto('/de/verschachtelt');
+  await page.goto('it/verschachtelt');
   page.getByRole('heading', {name: 'Verschachtelt'});
 
   // Dynamic params
   await page.goto('/en/news/3');
   await expect(page).toHaveURL('/news/3');
   page.getByRole('heading', {name: 'News article #3'});
-  await page.goto('/de/neuigkeiten/3');
-  await expect(page).toHaveURL('/de/neuigkeiten/3');
+  await page.goto('it/neuigkeiten/3');
+  await expect(page).toHaveURL('it/neuigkeiten/3');
   page.getByRole('heading', {name: 'News-Artikel #3'});
 
   // Automatic redirects
-  await page.goto('/de/nested');
-  await expect(page).toHaveURL('/de/verschachtelt');
+  await page.goto('it/nested');
+  await expect(page).toHaveURL('it/verschachtelt');
   page.getByRole('heading', {name: 'Verschachtelt'});
   await page.goto('/en/verschachtelt');
   await expect(page).toHaveURL('/nested');
@@ -609,7 +609,7 @@ it('can localize route handlers', async ({request}) => {
 
   // German
   {
-    const response = await request.get('/de/api?name=Welt');
+    const response = await request.get('it/api?name=Welt');
     expect(response.status()).toBe(200);
     const data = await response.json();
     expect(data).toEqual({message: 'Hallo Welt!'});
@@ -711,8 +711,8 @@ it('can use `getPahname` to define a canonical link', async ({page}) => {
   await page.goto('/news/3');
   await expect(getCanonicalPathname()).resolves.toBe('/news/3');
 
-  await page.goto('/de/neuigkeiten/3');
-  await expect(getCanonicalPathname()).resolves.toBe('/de/neuigkeiten/3');
+  await page.goto('it/neuigkeiten/3');
+  await expect(getCanonicalPathname()).resolves.toBe('it/neuigkeiten/3');
 });
 
 it('can define custom cookie options', async ({request}) => {
@@ -729,14 +729,17 @@ it('can render mdx content', async ({page}) => {
   await page.goto('/about');
   await page.getByRole('heading', {name: 'About'}).waitFor();
 
-  await page.goto('/de/about');
+  await page.goto('/it/about');
+  await page.getByRole('heading', {name: 'Über uns'}).waitFor();
+
+  await page.goto('/sr/about');
   await page.getByRole('heading', {name: 'Über uns'}).waitFor();
 });
 
 it('can switch the locale with `useRouter`', async ({page}) => {
   await page.goto('/client');
   await page.getByRole('button', {name: 'Switch to de'}).click();
-  await expect(page).toHaveURL('/de/client');
+  await expect(page).toHaveURL('it/client');
   await page.getByRole('button', {name: 'Switch to en'}).click();
   await expect(page).toHaveURL('/client');
 });
@@ -755,7 +758,10 @@ it('can use additional rewrites in the middleware', async ({browser}) => {
   await page.goto('/about');
   await page.getByRole('heading', {name: 'About v2'}).waitFor();
 
-  await page.goto('/de/about');
+  await page.goto('/it/about');
+  await page.getByRole('heading', {name: 'About v2'}).waitFor();
+
+  await page.goto('/sr/about');
   await page.getByRole('heading', {name: 'About v2'}).waitFor();
 
   await context.close();
@@ -817,7 +823,7 @@ describe('server actions', () => {
     page.getByPlaceholder('Enter a task').press('Enter');
     await page.getByText('Please enter a task.').waitFor();
 
-    await page.goto('/de/actions');
+    await page.goto('it/actions');
     page.getByPlaceholder('Geben Sie eine Aufgabe ein').press('Enter');
     await page.getByText('Bitte geben sie eine Aufgabe ein.').waitFor();
   });
