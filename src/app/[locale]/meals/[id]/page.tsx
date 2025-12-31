@@ -1,14 +1,13 @@
 'use client';
 
-import {useRouter, useParams} from 'next/navigation';
+import {useParams} from 'next/navigation';
 import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '@/lib/hooks';
 import {clearSelectedMeal} from '@/lib/features/meals/mealsSlice';
 import {fetchMealById} from '@/lib/features/meals/mealsThunks';
 
 export default function MealDetailPage() {
-  const router = useRouter();
-  const {id} = useParams(); // get dynamic route param
+  const {id} = useParams();
   const dispatch = useAppDispatch();
   const {selectedMeal, status, error} = useAppSelector((state) => state.meals);
 

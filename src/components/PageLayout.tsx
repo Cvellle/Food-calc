@@ -5,11 +5,6 @@ type Props = {
   title: string;
 };
 
-export default function PageLayout({children, title}: Props) {
-  return (
-    <div>
-      {/* <h1>{title}</h1> */}
-      {children}
-    </div>
-  );
+export default function PageLayout({children}: Props) {
+  return <div>{children}</div>;
 }

@@ -1,5 +1,4 @@
 import {endpoint} from '../../../config/endpoint';
-import {MealDetails} from './types';
 
 export interface Nutrient {
   nutrient: string;

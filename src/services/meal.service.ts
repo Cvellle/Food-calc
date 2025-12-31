@@ -1,4 +1,3 @@
-import {normalizeNutrients} from '@/lib/nutrition/normalizeNutrients';
 import {runPrediction} from '@/lib/nutrition/runPrediction';
 import {endpoint} from '../../config/endpoint';
 

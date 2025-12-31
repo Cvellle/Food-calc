@@ -1,3 +1,5 @@
+import {Nutrient} from '@/lib/nutrition/types';
+
 export interface MealListItem {
   id: number;
   name: string;
@@ -7,6 +9,6 @@ export interface MealListItem {
 export interface MealDetails {
   id: number;
   name: string;
-  nutrients: any[];
+  nutrients: Nutrient[];
   items: any[];
 }

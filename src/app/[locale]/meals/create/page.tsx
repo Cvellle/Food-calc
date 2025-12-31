@@ -1,7 +1,6 @@
 'use client';
 
 import {useState} from 'react';
-import {endpoint} from '../../../../../config/endpoint';
 import {createMealAsync} from '@/services/meal.service';
 
 type Item = {
@@ -20,7 +19,7 @@ export default function CreateMealPage() {
   const [loading, setLoading] = useState(false);
 
   function handleItemChange(index: number, field: keyof Item, value: any) {
-    const newItems = [...items];
+    const newItems: Item[] = [...items];
     newItems[index] = {...newItems[index], [field]: value};
     setItems(newItems);
   }
@@ -65,8 +64,12 @@ export default function CreateMealPage() {
       setSuccess(`Meal created with id: ${data.id}`);
       setName('');
       setItems([{itemId: '', quantity: '', measurement: 'grams'}]);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Error getting the meal');
+      }
     } finally {
       setLoading(false);
     }
@@ -76,7 +79,7 @@ export default function CreateMealPage() {
     <div className="max-w-xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Create New Meal</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form noValidate onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="name" className="block font-semibold mb-1">
             Meal Name
@@ -96,8 +99,11 @@ export default function CreateMealPage() {
           {items.map((item, i) => (
             <div key={i} className="flex gap-2 mb-3 items-end">
               <div className="flex flex-col flex-1">
-                <label className="text-sm mb-1">Item ID</label>
+                <label htmlFor={`itemId-${i}`} className="text-sm mb-1">
+                  Item ID
+                </label>
                 <input
+                  id={`itemId-${i}`}
                   type="number"
                   min={1}
                   value={item.itemId}
@@ -113,8 +119,11 @@ export default function CreateMealPage() {
                 />
               </div>
               <div className="flex flex-col flex-1">
-                <label className="text-sm mb-1">Quantity</label>
+                <label htmlFor={`quantity-${i}`} className="text-sm mb-1">
+                  Quantity
+                </label>
                 <input
+                  id={`quantity-${i}`}
                   type="number"
                   min={1}
                   value={item.quantity}
@@ -130,8 +139,11 @@ export default function CreateMealPage() {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="text-sm mb-1">Measurement</label>
+                <label htmlFor={`measurement-${i}`} className="text-sm mb-1">
+                  Measurement
+                </label>
                 <select
+                  id={`measurement-${i}`}
                   value={item.measurement}
                   onChange={(e) =>
                     handleItemChange(i, 'measurement', e.target.value)
@@ -152,6 +164,7 @@ export default function CreateMealPage() {
               </button>
             </div>
           ))}
+
           <button
             type="button"
             onClick={addItem}

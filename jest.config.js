@@ -6,7 +6,12 @@ const createJestConfig = nextJest({dir: './'});
 module.exports = async () => ({
   ...(await createJestConfig({
     testEnvironment: 'jsdom',
-    rootDir: 'src'
+    rootDir: 'src',
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    testMatch: ['**/?(*.)+(test).[tj]s?(x)'],
+    moduleNameMapper: {
+      '^@/(.*)$': '<rootDir>/$1'
+    }
   })()),
   transformIgnorePatterns: ['node_modules/(?!next-intl)/']
 });
