@@ -9,6 +9,31 @@ type Item = {
   measurement: 'grams' | 'unit';
 };
 
+const igredients = [
+  {id: 1, category: 'produce', name: 'apple'},
+  {id: 2, category: 'produce', name: 'banana'},
+  {id: 3, category: 'nuts/seeds', name: 'almonds'},
+  {id: 4, category: 'produce', name: 'carrot'},
+  {id: 5, category: 'produce', name: 'spinach'},
+  {id: 6, category: 'produce', name: 'broccoli'},
+  {id: 7, category: 'protein', name: 'chicken breast'},
+  {id: 8, category: 'protein', name: 'salmon'},
+  {id: 9, category: 'pantry', name: 'flour'},
+  {id: 10, category: 'pantry', name: 'sugar'},
+  {id: 11, category: 'pantry', name: 'salt'},
+  {id: 12, category: 'pantry', name: 'olive oil'},
+  {id: 13, category: 'dairy', name: 'butter'},
+  {id: 14, category: 'protein', name: 'eggs'},
+  {id: 15, category: 'dairy', name: 'milk'},
+  {id: 16, category: 'produce', name: 'tomatoes'},
+  {id: 17, category: 'produce', name: 'onions'},
+  {id: 18, category: 'produce', name: 'garlic'},
+  {id: 19, category: 'produce', name: 'basil'},
+  {id: 20, category: 'pantry', name: 'pasta'},
+  {id: 21, category: 'dairy', name: 'cheese'},
+  {id: 22, category: 'pantry', name: 'rice'}
+];
+
 export default function CreateMealPage() {
   const [name, setName] = useState('');
   const [items, setItems] = useState<Item[]>([
@@ -29,7 +54,7 @@ export default function CreateMealPage() {
   }
 
   function removeItem(index: number) {
-    if (items.length === 1) return; // at least one item
+    if (items.length === 1) return;
     setItems(items.filter((_, i) => i !== index));
   }
 
@@ -38,7 +63,6 @@ export default function CreateMealPage() {
     setError(null);
     setSuccess(null);
 
-    // Basic client validation
     if (!name.trim()) {
       setError('Meal name is required');
       return;
@@ -61,7 +85,7 @@ export default function CreateMealPage() {
         }))
       };
       const data = await createMealAsync(payload);
-      setSuccess(`Meal created with id: ${data.id}`);
+      setSuccess(`Meal sucessfully created`);
       setName('');
       setItems([{itemId: '', quantity: '', measurement: 'grams'}]);
     } catch (err) {
@@ -100,9 +124,28 @@ export default function CreateMealPage() {
             <div key={i} className="flex gap-2 mb-3 items-end">
               <div className="flex flex-col flex-1">
                 <label htmlFor={`itemId-${i}`} className="text-sm mb-1">
-                  Item ID
+                  Item
                 </label>
-                <input
+                <select
+                  id={`measurement-${i}`}
+                  value={item.itemId}
+                  onChange={(e) =>
+                    handleItemChange(
+                      i,
+                      'itemId',
+                      e.target.value === '' ? '' : Number(e.target.value)
+                    )
+                  }
+                  className="border border-gray-300 rounded px-2 py-1"
+                  required
+                >
+                  {igredients?.map((ingredient, i) => (
+                    <option key={i} value={ingredient.id}>
+                      {ingredient.name}
+                    </option>
+                  ))}
+                </select>
+                {/* <input
                   id={`itemId-${i}`}
                   type="number"
                   min={1}
@@ -116,7 +159,7 @@ export default function CreateMealPage() {
                   }
                   className="border border-gray-300 rounded px-2 py-1"
                   required
-                />
+                /> */}
               </div>
               <div className="flex flex-col flex-1">
                 <label htmlFor={`quantity-${i}`} className="text-sm mb-1">

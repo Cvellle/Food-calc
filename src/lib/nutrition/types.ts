@@ -40,3 +40,27 @@ export type MealDetails = {
   }[];
   items: any[];
 };
+
+export type NutrientEntry = {
+  nutrient: string;
+  unit: string;
+  total: number;
+};
+
+export type MealItem = {
+  name: string;
+  quantity: number;
+  measurement: string;
+};
+
+export type MealResponse = {
+  nutrients: NutrientEntry[];
+  items: MealItem[];
+};
+
+export type Suggestion = {
+  id: string;
+  title: string;
+  reason: string;
+  confidence?: number; // from TF model
+};

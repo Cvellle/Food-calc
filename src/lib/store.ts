@@ -1,12 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
 import mealsReducer from './features/meals/mealsSlice';
+import dailyMealsReducer from './features/meals/DailyMealsSlice';
 
 export const store = configureStore({
   reducer: {
-    meals: mealsReducer
+    meals: mealsReducer,
+    dailyMeals: dailyMealsReducer
   }
 });
 
-// Types
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

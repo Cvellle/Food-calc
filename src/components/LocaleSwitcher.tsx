@@ -4,11 +4,9 @@ import {useLocale, useTranslations} from 'next-intl';
 import {Link} from '@/i18n/navigation';
 
 export default function LocaleSwitcher() {
-  // Define locales with proper types
   const locales: {code: string; label: string}[] = [
     {code: 'en', label: 'EN'},
-    {code: 'it', label: 'IT'},
-    {code: 'sr', label: 'SR'}
+    {code: 'it', label: 'IT'}
   ] as const;
 
   type TranslationFunction = (
@@ -21,7 +19,6 @@ export default function LocaleSwitcher() {
 
   return (
     <div style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
-      {/* Use current locale for translation */}
       <span>{t('switchLocale', {locale})}</span>
 
       {locales.map(({code, label}) => {

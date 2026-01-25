@@ -16,7 +16,6 @@ export default function MealDetailPage() {
 
     dispatch(fetchMealById(id as string));
 
-    // Cleanup on unmount
     return () => {
       dispatch(clearSelectedMeal());
     };
@@ -36,7 +35,7 @@ export default function MealDetailPage() {
           {selectedMeal.nutrients.map(({nutrient, unit, total}) => (
             <li
               key={nutrient}
-              className="border rounded p-4 flex justify-between bg-gray-50"
+              className="border border-emerald-300 rounded p-4 flex justify-between"
             >
               <span className="font-medium">{nutrient}</span>
               <span>
