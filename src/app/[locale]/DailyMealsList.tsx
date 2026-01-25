@@ -21,7 +21,7 @@ export function DailyMealsList() {
           className="rounded-lg border border-green-100 bg-white p-3"
         >
           <div className="mb-2 flex items-center justify-between">
-            <strong className="text-green-800">Meal #{index + 1}</strong>
+            <strong className="text-green-800">Meal {index + 1}</strong>
 
             <button
               onClick={() => dispatch(removeMeal(index))}
