@@ -28,7 +28,6 @@ export default function MealDetailPage() {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-md shadow-md">
       <h1 className="text-3xl font-bold mb-6">{selectedMeal.name}</h1>
-
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Nutrients</h2>
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
