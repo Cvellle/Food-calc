@@ -1,6 +1,6 @@
 # Tracciatore di Pasti e Nutrienti
 
-<span className="text-lg text-gray-600 mt-4">
+<span className="text-lg text-gray-600 mt-4 block">
   Analizza i pasti, comprendi gli ingredienti e valuta l’assunzione dei
   nutrienti rispetto ai valori giornalieri o personalizzati.
 </span>
@@ -10,26 +10,28 @@
 ## Come funziona
 
 <div className="p-2 grid gap-6 mt-6 md:grid-cols-3">
-  <div className="rounded-xl border p-5">
-    <h3 className="font-semibold text-lg">1. Crea i pasti</h3>
-    <p className="text-sm text-gray-600 mt-2">
+  {/* Box 1 */}
+  <div className="rounded-xl border-t-4 border-emerald-600 bg-white p-5 shadow-sm">
+    <h3 className="font-semibold text-lg text-emerald-800">1. Crea i pasti</h3>
+    <div className="text-sm text-gray-600 mt-2">
       Ogni pasto è composto da più ingredienti con quantità precise.
-    </p>
+    </div>
   </div>
 
-<div className="rounded-xl border p-5">
-  <h3 className="font-semibold text-lg">2. Somma i nutrienti</h3>
-  <p className="text-sm text-gray-600 mt-2">
-    I valori nutrizionali degli ingredienti vengono aggregati per pasto o per
-    giorno.
-  </p>
-</div>
+  {/* Box 2 */}
+  <div className="rounded-xl border-t-4 border-stone-200 bg-white p-5 shadow-sm">
+    <h3 className="font-semibold text-lg text-stone-800">2. Somma i nutrienti</h3>
+    <div className="text-sm text-gray-600 mt-2">
+      I valori nutrizionali degli ingredienti vengono aggregati per pasto o per giorno.
+    </div>
+  </div>
 
-  <div className="rounded-xl border p-5">
-    <h3 className="font-semibold text-lg">3. Valuta i limiti</h3>
-    <p className="text-sm text-gray-600 mt-2">
+  {/* Box 3 */}
+  <div className="rounded-xl border-t-4 border-red-600 bg-white p-5 shadow-sm">
+    <h3 className="font-semibold text-lg text-red-800">3. Valuta i limiti</h3>
+    <div className="text-sm text-gray-600 mt-2">
       I totali vengono confrontati con intervalli consigliati per individuare eccessi o carenze.
-    </p>
+    </div>
   </div>
 </div>
 
@@ -39,33 +41,35 @@
 
 ### Pollo alla griglia con riso
 
-<table className="mt-4 w-full border-collapse text-sm">
-  <thead>
-    <tr className="border-b">
-      <th className="py-2 text-left">Ingrediente</th>
-      <th className="py-2 text-left">Quantità</th>
-      <th className="py-2 text-right">Calorie</th>
-      <th className="py-2 text-right">Proteine (g)</th>
-      <th className="py-2 text-right">Carboidrati (g)</th>
-      <th className="py-2 text-right">Grassi (g)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr className="border-b">
-      <td className="py-2">Petto di pollo</td>
-      <td className="py-2">200 g</td>
-      <td className="py-2 text-right">330</td>
-      <td className="py-2 text-right">62</td>
-      <td className="py-2 text-right">0</td>
-      <td className="py-2 text-right">7</td>
-    </tr>
-    <tr>
-      <td className="py-2">Riso bianco</td>
-      <td className="py-2">150 g</td>
-      <td className="py-2 text-right">195</td>
-      <td className="py-2 text-right">4</td>
-      <td className="py-2 text-right">42</td>
-      <td className="py-2 text-right">1</td>
-    </tr>
-  </tbody>
-</table>
+<div className="overflow-x-auto">
+  <table className="mt-4 w-full border-collapse text-sm">
+    <thead>
+      <tr className="border-b-2 border-stone-200">
+        <th className="py-3 text-left font-bold text-emerald-700">Ingrediente</th>
+        <th className="py-3 text-left font-bold text-stone-600">Quantità</th>
+        <th className="py-3 text-right font-bold text-red-600">Calorie</th>
+        <th className="py-3 text-right font-bold text-stone-600">Proteine (g)</th>
+        <th className="py-3 text-right font-bold text-stone-600">Carboidrati (g)</th>
+        <th className="py-3 text-right font-bold text-stone-600">Grassi (g)</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-stone-100">
+      <tr>
+        <td className="py-3 font-medium">Petto di pollo</td>
+        <td className="py-3 text-stone-500">200 g</td>
+        <td className="py-3 text-right font-mono text-red-600">330</td>
+        <td className="py-3 text-right">62</td>
+        <td className="py-3 text-right">0</td>
+        <td className="py-3 text-right">7</td>
+      </tr>
+      <tr>
+        <td className="py-3 font-medium">Riso bianco</td>
+        <td className="py-3 text-stone-500">150 g</td>
+        <td className="py-3 text-right font-mono text-red-600">195</td>
+        <td className="py-3 text-right">4</td>
+        <td className="py-3 text-right">42</td>
+        <td className="py-3 text-right">1</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
