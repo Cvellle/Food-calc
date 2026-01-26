@@ -28,7 +28,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // const t = await getTranslations({null, namespace: 'Navigation'});
   const t = useTranslations('Navigation');
 
   const NAV_ITEMS: NavItem[] = [

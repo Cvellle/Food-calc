@@ -46,6 +46,10 @@
         "nested": "Pagina annidata",
         "newsArticle": "Articolo news #{articleId}"
     },
+    "CreateMeal": {
+        "addItem": "Aggiungi un elemento",
+        "createMeal": "Crea il pasto"
+    },
     "Nested": {
         "description": "Questa è una pagina annidata.",
         "title": "Annidata"

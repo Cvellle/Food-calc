@@ -49,6 +49,10 @@ declare const messages: {
     "nested": "Nested page",
     "newsArticle": "News article #{articleId}"
   },
+  "CreateMeal": {
+    "addItem": "Add item",
+    "createMeal": "Create meal"
+  },
   "Nested": {
     "description": "This is a nested page.",
     "title": "Nested"

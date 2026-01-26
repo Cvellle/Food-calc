@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import {createMealAsync} from '@/services/meal.service';
+import {useTranslations} from 'next-intl';
 
 type Item = {
   itemId: number | '';
@@ -42,6 +43,7 @@ export default function CreateMealPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const t = useTranslations('CreateMeal');
 
   function handleItemChange(index: number, field: keyof Item, value: any) {
     const newItems: Item[] = [...items];
@@ -177,7 +179,7 @@ export default function CreateMealPage() {
                       e.target.value === '' ? '' : Number(e.target.value)
                     )
                   }
-                  className="border border-gray-300 rounded px-2 py-1"
+                  className="border border-gray-300 rounded px-2 py-[0] h-[31px]"
                   required
                 />
               </div>
@@ -213,7 +215,7 @@ export default function CreateMealPage() {
             onClick={addItem}
             className="mt-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-indigo-700"
           >
-            Add Item
+            {t('addItem')}
           </button>
         </div>
 
@@ -225,7 +227,7 @@ export default function CreateMealPage() {
           disabled={loading}
           className="w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700 disabled:opacity-50"
         >
-          {loading ? 'Creating...' : 'Create Meal'}
+          {loading ? 'Creating...' : t('createMeal')}
         </button>
       </form>
     </div>
