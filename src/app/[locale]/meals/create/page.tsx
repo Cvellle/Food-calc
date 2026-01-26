@@ -211,19 +211,19 @@ export default function CreateMealPage() {
           <button
             type="button"
             onClick={addItem}
-            className="mt-2 px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+            className="mt-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-indigo-700"
           >
             Add Item
           </button>
         </div>
 
         {error && <p className="text-red-600">{error}</p>}
-        {success && <p className="text-green-600">{success}</p>}
+        {success && <p className="text-emerald-600">{success}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
+          className="w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700 disabled:opacity-50"
         >
           {loading ? 'Creating...' : 'Create Meal'}
         </button>

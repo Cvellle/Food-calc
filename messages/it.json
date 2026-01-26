@@ -37,9 +37,12 @@
         "switchLocale_OLD": "Passa a to {locale, select, it {Italiano} en {Inglese} sr {Serbp} other {Unknown}}"
     },
     "Navigation": {
-        "about": "Informazioni (MDX)",
+        "meals": "Pasti",
+        "about": "Informazioni",
+        "allMeals": "Tutti i pasti",
+        "createMeal": "Crea il pasto",
         "client": "Pagina Client",
-        "home": "Home",
+        "home": "Inizio",
         "nested": "Pagina annidata",
         "newsArticle": "Articolo news #{articleId}"
     },

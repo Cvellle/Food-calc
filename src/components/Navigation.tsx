@@ -1,8 +1,9 @@
 'use client';
 
 import {useState, useRef, useEffect} from 'react';
-import Link from 'next/link'; // Next.js Link without legacyBehavior
+import Link from 'next/link';
 import LocaleSwitcher from './LocaleSwitcher';
+import {useTranslations} from 'next-intl';
 
 type NavLink = {
   type: 'link';
@@ -22,28 +23,32 @@ type NavDropdown = {
 
 export type NavItem = NavLink | NavDropdown;
 
-export const NAV_ITEMS: NavItem[] = [
-  {
-    label: 'Meals',
-    type: 'dropdown',
-    items: [
-      {label: 'All meals', description: 'See all meals', href: '/meals'},
-      {
-        label: 'Create meal',
-        description: 'Create a new meal',
-        href: '/meals/create'
-      }
-    ]
-  },
-  {label: 'About', type: 'link', href: '/about'}
-];
-
 export default function Navbar() {
   const [open, setOpen] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
+  // const t = await getTranslations({null, namespace: 'Navigation'});
+  const t = useTranslations('Navigation');
+
+  const NAV_ITEMS: NavItem[] = [
+      {label: t('home'), type: 'link', href: '/'},  
+      {label: t('allMeals'), type: 'link', href: '/meals'},
+      {label: t('createMeal'), type: 'link', href: '/meals/create'},
+      {label: t('about'), type: 'link', href: '/about'}
+    // Left here for dropdown
+    //   type: 'dropdown',
+    //   items: [
+    //     {label: 'All meals', description: 'See all meals', href: '/meals'},
+    //     {
+    //       label: 'Create meal',
+    //       description: 'Create a new meal',
+    //       href: '/meals/create'
+    //     }
+    //   ]
+    // },
+  ];
+
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (!containerRef.current?.contains(e.target as Node)) {
@@ -60,12 +65,12 @@ export default function Navbar() {
   return (
     <div ref={containerRef} className="w-full border-b bg-white">
       <nav className="flex justify-between max-w-6xl mx-auto px-4 py-4 items-center gap-6 relative">
-        {/* Logo */}
+        
         <Link href={'/'} className="font-bold text-xl">
           Food calc
         </Link>
 
-        {/* DESKTOP MENU */}
+      
         <div className="hidden md:flex items-center gap-6">
           {NAV_ITEMS.map((item) => (
             <div key={item.label} className="relative">
@@ -108,7 +113,7 @@ export default function Navbar() {
           <LocaleSwitcher />
         </div>
 
-        {/* MOBILE HAMBURGER BUTTON */}
+        
         <button
           className="md:hidden ml-auto text-2xl"
           onClick={() => setMobileOpen((prev) => !prev)}

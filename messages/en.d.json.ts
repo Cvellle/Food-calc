@@ -40,7 +40,10 @@ declare const messages: {
     "switchLocale_OLD": "Switch to {locale, select, it {Italian} en {English} sr {Serbian} other {Unknown}}"
   },
   "Navigation": {
-    "about": "About (MDX)",
+    "meals": "Meals",
+    "about": "About",
+    "allMeals": "All meals",
+    "createMeal": "Create meal",
     "client": "Client page",
     "home": "Home",
     "nested": "Nested page",
