@@ -47,7 +47,7 @@
         "newsArticle": "Articolo news #{articleId}"
     },
     "MealCard": {
-        "name": " Nome di pasto",
+        "name": " Nome del pasto",
         "allIngredients": "Tutti gli ingredienti",
         "see": "Vedi il pasto",
         "add": "Aggiungi il pasto"
