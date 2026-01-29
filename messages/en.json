@@ -46,6 +46,16 @@
     "nested": "Nested page",
     "newsArticle": "News article #{articleId}"
   },
+  "MealCard": {
+    "name": " Meal name",
+    "allIngredients": "All ingredients",
+    "see": "See meal",
+    "add": "Add meal"
+  },
+  "DailyMeals": {
+    "title": "Daily mMals",
+    "total": "Total nutrients"
+  },
   "CreateMeal": {
     "addItem": "Add item",
     "createMeal": "Create meal"

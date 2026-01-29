@@ -2,14 +2,18 @@
 
 import {removeMeal} from '@/lib/features/meals/DailyMealsSlice';
 import {useAppDispatch, useAppSelector} from '@/lib/hooks';
+import {useTranslations} from 'next-intl';
 
 export function DailyMealsList() {
   const meals = useAppSelector((s) => s.dailyMeals.meals);
   const dispatch = useAppDispatch();
+  const t = useTranslations();
 
   return (
     <div className="space-y-4 rounded-xl border border-green-200 p-4">
-      <h2 className="text-xl font-semibold text-green-700">Daily Meals</h2>
+      <h2 className="text-xl font-semibold text-green-700">
+        {t('DailyMeals.title')}
+      </h2>
 
       {meals.length === 0 && (
         <p className="text-sm text-gray-500">No meals added yet.</p>

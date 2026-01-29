@@ -46,6 +46,16 @@
         "nested": "Pagina annidata",
         "newsArticle": "Articolo news #{articleId}"
     },
+    "MealCard": {
+        "name": " Nome di pasto",
+        "allIngredients": "Tutti gli ingredienti",
+        "see": "Vedi il pasto",
+        "add": "Aggiungi il pasto"
+    },
+    "DailyMeals": {
+        "title": "I pasti di giorno",
+        "total": "Nutrienti totali"
+    },
     "CreateMeal": {
         "addItem": "Aggiungi un elemento",
         "createMeal": "Crea il pasto"

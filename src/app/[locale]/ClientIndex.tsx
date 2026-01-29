@@ -7,10 +7,12 @@ import {useRouter} from 'next/navigation';
 import {DailyMealsList} from './DailyMealsList';
 import {fetchAndAddMeal} from '@/lib/features/meals/DailyMealsSlice';
 import {NutrientSummary} from '../NutrientSummary';
+import {useTranslations} from 'next-intl';
 
 export default function ClientIndex() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
 
   const loading = useAppSelector((s) => s.dailyMeals.loading);
 
@@ -31,8 +33,8 @@ export default function ClientIndex() {
 
   return (
     <div>
-      <div className="flex wrap">
-        <div className="w-100 md:w-[60%] p-[35px]">
+      <div className="flex flex-wrap">
+        <div className="w-[100%] md:w-[60%] p-[35px]">
           <DailyMealsList />
         </div>
         <NutrientSummary />
@@ -56,12 +58,12 @@ export default function ClientIndex() {
           "
           >
             <h3 className="text-xl font-semibold mb-3 text-gray-900">
-              Meal name:
+              {t('MealCard.name')}
             </h3>
             <p className="mb-5 text-gray-800">{post.name}</p>
 
             <h4 className="text-lg font-medium mb-2 text-gray-700">
-              Ingredients used:
+              {t('MealCard.allIngredients')}
             </h4>
             <p className="text-gray-600 flex-grow">
               {post.ingredients_preview}
@@ -88,7 +90,7 @@ export default function ClientIndex() {
             "
               onClick={() => router.push(`/meals/${post.id}`)}
             >
-              See meal
+              {t('MealCard.see')}
             </button>
             <button
               type="button"
@@ -111,7 +113,7 @@ export default function ClientIndex() {
             "
               onClick={() => handleAdd(String(post.id))}
             >
-              Add meal
+              {t('MealCard.add')}
             </button>
           </div>
         ))}

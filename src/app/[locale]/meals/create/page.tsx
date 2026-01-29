@@ -103,7 +103,7 @@ export default function CreateMealPage() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Create New Meal</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('createMeal')}</h1>
 
       <form noValidate onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -123,7 +123,7 @@ export default function CreateMealPage() {
         <div>
           <label className="block font-semibold mb-2">Items</label>
           {items.map((item, i) => (
-            <div key={i} className="flex gap-2 mb-3 items-end">
+            <div key={i} className="flex flex-wrap gap-2 mb-3 items-end">
               <div className="flex flex-col flex-1">
                 <label htmlFor={`itemId-${i}`} className="text-sm mb-1">
                   Item
@@ -213,7 +213,7 @@ export default function CreateMealPage() {
           <button
             type="button"
             onClick={addItem}
-            className="mt-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-indigo-700"
+            className="w-[100%] md:w-auto mt-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-indigo-700"
           >
             {t('addItem')}
           </button>
