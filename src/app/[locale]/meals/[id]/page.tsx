@@ -9,7 +9,7 @@ import {fetchMealById} from '@/lib/features/meals/mealsThunks';
 export default function MealDetailPage() {
   const {id} = useParams();
   const dispatch = useAppDispatch();
-  const {selectedMeal, status, error} = useAppSelector((state) => state.meals);
+  const {selectedMeal, status, error} = useAppSelector((state) => state?.meals);
 
   useEffect(() => {
     if (!id) return;

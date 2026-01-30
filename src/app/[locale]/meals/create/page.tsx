@@ -1,8 +1,9 @@
 'use client';
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {createMealAsync} from '@/services/meal.service';
 import {useTranslations} from 'next-intl';
+import {endpoint} from '../../../../../config/endpoint';
 
 type Item = {
   itemId: number | '';
@@ -10,40 +11,34 @@ type Item = {
   measurement: 'grams' | 'unit';
 };
 
-const igredients = [
-  {id: 1, category: 'produce', name: 'apple'},
-  {id: 2, category: 'produce', name: 'banana'},
-  {id: 3, category: 'nuts/seeds', name: 'almonds'},
-  {id: 4, category: 'produce', name: 'carrot'},
-  {id: 5, category: 'produce', name: 'spinach'},
-  {id: 6, category: 'produce', name: 'broccoli'},
-  {id: 7, category: 'protein', name: 'chicken breast'},
-  {id: 8, category: 'protein', name: 'salmon'},
-  {id: 9, category: 'pantry', name: 'flour'},
-  {id: 10, category: 'pantry', name: 'sugar'},
-  {id: 11, category: 'pantry', name: 'salt'},
-  {id: 12, category: 'pantry', name: 'olive oil'},
-  {id: 13, category: 'dairy', name: 'butter'},
-  {id: 14, category: 'protein', name: 'eggs'},
-  {id: 15, category: 'dairy', name: 'milk'},
-  {id: 16, category: 'produce', name: 'tomatoes'},
-  {id: 17, category: 'produce', name: 'onions'},
-  {id: 18, category: 'produce', name: 'garlic'},
-  {id: 19, category: 'produce', name: 'basil'},
-  {id: 20, category: 'pantry', name: 'pasta'},
-  {id: 21, category: 'dairy', name: 'cheese'},
-  {id: 22, category: 'pantry', name: 'rice'}
-];
-
 export default function CreateMealPage() {
   const [name, setName] = useState('');
   const [items, setItems] = useState<Item[]>([
     {itemId: '', quantity: '', measurement: 'grams'}
   ]);
+  const [selectItems, setSelectItems] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const t = useTranslations('CreateMeal');
+
+  useEffect(() => {
+    const getItems = async () => {
+      try {
+        const res = await fetch(`${endpoint}/items`);
+        if (!res.ok) throw new Error('Failed');
+        const list = await res.json();
+        setSelectItems(list);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Unknown get items error');
+        }
+      }
+    };
+    getItems();
+  }, []);
 
   function handleItemChange(index: number, field: keyof Item, value: any) {
     const newItems: Item[] = [...items];
@@ -56,7 +51,6 @@ export default function CreateMealPage() {
   }
 
   function removeItem(index: number) {
-    if (items.length === 1) return;
     setItems(items.filter((_, i) => i !== index));
   }
 
@@ -86,7 +80,7 @@ export default function CreateMealPage() {
           measurement
         }))
       };
-      const data = await createMealAsync(payload);
+      createMealAsync(payload);
       setSuccess(`Meal sucessfully created`);
       setName('');
       setItems([{itemId: '', quantity: '', measurement: 'grams'}]);
@@ -104,7 +98,6 @@ export default function CreateMealPage() {
   return (
     <div className="max-w-xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">{t('createMeal')}</h1>
-
       <form noValidate onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="name" className="block font-semibold mb-1">
@@ -130,38 +123,23 @@ export default function CreateMealPage() {
                 </label>
                 <select
                   id={`measurement-${i}`}
-                  value={item.itemId}
+                  value={item.itemId || ''}
                   onChange={(e) =>
-                    handleItemChange(
-                      i,
-                      'itemId',
-                      e.target.value === '' ? '' : Number(e.target.value)
-                    )
+                    handleItemChange(i, 'itemId', e.target.value)
                   }
                   className="border border-gray-300 rounded px-2 py-1"
                   required
                 >
-                  {igredients?.map((ingredient, i) => (
-                    <option key={i} value={ingredient.id}>
-                      {ingredient.name}
-                    </option>
-                  ))}
-                </select>
-                {/* <input
-                  id={`itemId-${i}`}
-                  type="number"
-                  min={1}
-                  value={item.itemId}
-                  onChange={(e) =>
-                    handleItemChange(
-                      i,
-                      'itemId',
-                      e.target.value === '' ? '' : Number(e.target.value)
+                  <option value="" disabled={item.itemId !== ''}></option>
+
+                  {selectItems?.map(
+                    (ingredient: {id: string | number; name: string}, i) => (
+                      <option key={i} value={ingredient.id}>
+                        {ingredient.name}
+                      </option>
                     )
-                  }
-                  className="border border-gray-300 rounded px-2 py-1"
-                  required
-                /> */}
+                  )}
+                </select>
               </div>
               <div className="flex flex-col flex-1">
                 <label htmlFor={`quantity-${i}`} className="text-sm mb-1">
@@ -200,9 +178,11 @@ export default function CreateMealPage() {
                 </select>
               </div>
               <button
+                disabled={items.length === 1}
                 type="button"
                 onClick={() => removeItem(i)}
-                className="text-red-500 hover:text-red-700 font-bold px-2"
+                className={`b-[3px] cursor-pointer font-bold px-2
+                  ${items.length === 1 ? 'text-gray-500' : 'text-red-500'}`}
                 aria-label="Remove item"
               >
                 &times;
