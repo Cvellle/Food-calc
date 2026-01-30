@@ -108,7 +108,8 @@ export default function CreateMealPage() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="py-[0] h-[35px]
+            w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             required
           />
         </div>
@@ -127,7 +128,7 @@ export default function CreateMealPage() {
                   onChange={(e) =>
                     handleItemChange(i, 'itemId', e.target.value)
                   }
-                  className="border border-gray-300 rounded px-2 py-1"
+                  className="py-[0] h-[35px] border border-gray-300 rounded px-2 py-1"
                   required
                 >
                   <option value="" disabled={item.itemId !== ''}></option>
@@ -157,7 +158,7 @@ export default function CreateMealPage() {
                       e.target.value === '' ? '' : Number(e.target.value)
                     )
                   }
-                  className="border border-gray-300 rounded px-2 py-[0] h-[31px]"
+                  className="border border-gray-300 rounded px-2 py-[0] h-[35px]"
                   required
                 />
               </div>
@@ -171,7 +172,7 @@ export default function CreateMealPage() {
                   onChange={(e) =>
                     handleItemChange(i, 'measurement', e.target.value)
                   }
-                  className="border border-gray-300 rounded px-2 py-1"
+                  className="py-[0] h-[35px] border border-gray-300 rounded px-2 py-1"
                 >
                   <option value="grams">grams</option>
                   <option value="unit">unit</option>
@@ -181,7 +182,7 @@ export default function CreateMealPage() {
                 disabled={items.length === 1}
                 type="button"
                 onClick={() => removeItem(i)}
-                className={`b-[3px] cursor-pointer font-bold px-2
+                className={`mb-[5px] cursor-pointer font-bold px-2
                   ${items.length === 1 ? 'text-gray-500' : 'text-red-500'}`}
                 aria-label="Remove item"
               >
