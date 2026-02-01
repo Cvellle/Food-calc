@@ -3,11 +3,30 @@
 import {removeMeal} from '@/lib/features/meals/DailyMealsSlice';
 import {useAppDispatch, useAppSelector} from '@/lib/hooks';
 import {useTranslations} from 'next-intl';
+import {format} from 'date-fns';
 
-export function DailyMealsList() {
+type DailyMealsListProps = {
+  date?: Date;
+};
+
+export function DailyMealsList({date}: DailyMealsListProps) {
   const meals = useAppSelector((s) => s.dailyMeals.meals);
   const dispatch = useAppDispatch();
   const t = useTranslations();
+
+  const getList = () => {
+    if (!date) return meals;
+
+    const selected = format(date, 'yyyy-MM-dd');
+
+    return meals.filter((post: any) => {
+      if (!post.date) return false;
+      const mealDate = post.date;
+      return format(mealDate, 'yyyy-MM-dd') === selected;
+    });
+  };
+
+  const filteredMeals = getList();
 
   return (
     <div className="space-y-4 rounded-xl border border-green-200 p-4">
@@ -15,11 +34,11 @@ export function DailyMealsList() {
         {t('DailyMeals.title')}
       </h2>
 
-      {meals.length === 0 && (
+      {filteredMeals.length === 0 && (
         <p className="text-sm text-gray-500">No meals added yet.</p>
       )}
 
-      {meals.map((meal, index) => (
+      {filteredMeals.map((meal, index) => (
         <div
           key={index}
           className="rounded-lg border border-green-100 bg-white p-3"

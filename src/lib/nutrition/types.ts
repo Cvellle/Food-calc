@@ -49,6 +49,7 @@ export type NutrientEntry = {
 
 export type MealItem = {
   name: string;
+  date: any;
   quantity: number;
   measurement: string;
 };

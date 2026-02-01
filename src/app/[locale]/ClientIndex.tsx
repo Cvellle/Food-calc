@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '@/lib/hooks';
 import {fetchMeals} from '@/lib/features/meals/mealsThunks';
 import {useRouter} from 'next/navigation';
@@ -9,10 +9,12 @@ import {fetchAndAddMeal} from '@/lib/features/meals/DailyMealsSlice';
 import {NutrientSummary} from '../NutrientSummary';
 import {useTranslations} from 'next-intl';
 
-import {useSelector} from 'react-redux';
-import {MyCalendar} from '@/components/Calandar/DayPicker';
+import {MyDayPicker} from '@/components/Calandar/MyDayPicker';
+import {format, isSameDay} from 'date-fns';
 
 export default function ClientIndex() {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
   const router = useRouter();
   const dispatch = useAppDispatch();
   const t = useTranslations();
@@ -40,17 +42,31 @@ export default function ClientIndex() {
   }, [dispatch, status]);
 
   const handleAdd = (mealId: string) => {
-    dispatch(fetchAndAddMeal(mealId));
+    dispatch(fetchAndAddMeal({mealId, date}));
   };
 
   if (status === 'loading') return <p>Loading…</p>;
   if (status === 'failed') return <p>{error}</p>;
 
+  const handleDateChange = (value: Date | undefined) => {
+    if (value) {
+      setDate(value);
+      const formattedDate = value.toISOString().split('T')[0];
+      // dispatch(fetchMeals(formattedDate));
+    }
+  };
+
   return (
-    <div>
-      <div className="flex flex-wrap">
-        <div className="w-[100%] md:w-[60%] p-[35px]">
-          <DailyMealsList />
+    <div className="max-w-7xl mx-auto">
+      <div className="flex flex-wrap md:flex-nowrap gap-6 p-4">
+        <div className="border rounded-xl p-4 bg-white shadow-sm h-fit w-fit mx-auto md:mx-0">
+          <MyDayPicker selectedDate={date} onDateChange={handleDateChange} />
+        </div>
+        <div className="w-full md:w-[450px] shrink-0 p-4 bg-white rounded-xl shadow-sm">
+          {date && date instanceof Date
+            ? format(date, 'dd.MM.yyyy')
+            : 'Izaberite datum'}
+          <DailyMealsList date={date} />
         </div>
         <NutrientSummary />
       </div>

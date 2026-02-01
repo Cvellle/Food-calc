@@ -35,9 +35,9 @@ export const selectAggregatedNutrients = createSelector(
 
 export const fetchAndAddMeal = createAsyncThunk<
   MealResponse,
-  string,
+  {mealId: string; date: Date | undefined},
   {rejectValue: string}
->('dailyMeals/fetchAndAddMeal', async (mealId, {rejectWithValue}) => {
+>('dailyMeals/fetchAndAddMeal', async ({mealId, date}, {rejectWithValue}) => {
   try {
     const res = await fetch(`${endpoint}/meals/${mealId}`);
 
@@ -45,8 +45,12 @@ export const fetchAndAddMeal = createAsyncThunk<
       throw new Error('Failed to fetch meal');
     }
 
-    return (await res.json()) as MealResponse;
-  } catch (err) {
+    const data = (await res.json()) as MealResponse;
+    return {
+      ...data,
+      date: date ? date.toISOString() : new Date().toISOString()
+    };
+  } catch {
     return rejectWithValue('Unable to load meal');
   }
 });
@@ -82,10 +86,11 @@ const dailyMealsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAndAddMeal.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchAndAddMeal.fulfilled, (state, action) => {
-        console.log(123, action.payload);
+        state.loading = false;
         state.meals.push(action.payload);
       })
       .addCase(fetchAndAddMeal.rejected, (state, action) => {
