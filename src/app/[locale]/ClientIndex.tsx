@@ -36,10 +36,8 @@ export default function ClientIndex() {
   // }
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchMeals());
-    }
-  }, [dispatch, status]);
+    dispatch(fetchMeals());
+  }, []);
 
   const handleAdd = (mealId: string) => {
     dispatch(fetchAndAddMeal({mealId, date}));
