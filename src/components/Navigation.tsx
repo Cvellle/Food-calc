@@ -6,6 +6,7 @@ import LocaleSwitcher from './LocaleSwitcher';
 import {useTranslations} from 'next-intl';
 import {endpoint} from '../../config/endpoint';
 import {
+  fetchCurrentUser,
   logout,
   selectCurrentUser,
   selectIsAuthenticated
@@ -13,8 +14,8 @@ import {
 
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch} from '@/lib/store';
+import {fetchWithAuth} from '@/hooks/useFetchWithAuth';
 
-// Tipovi ostaju isti...
 type NavLink = {type: 'link'; label: string; href: string};
 type NavDropdown = {
   type: 'dropdown';
@@ -46,6 +47,7 @@ export default function Navbar() {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(null);
     }
     document.addEventListener('mousedown', handleClick);
+    dispatch(fetchCurrentUser());
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
@@ -61,7 +63,6 @@ export default function Navbar() {
   const toggle = (key: string) =>
     setOpen((prev) => (prev === key ? null : key));
 
-  // Avatar komponenta za višekratnu upotrebu
   const UserAvatar = () => (
     <div className="flex items-center gap-2">
       <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm uppercase">
