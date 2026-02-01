@@ -26,7 +26,7 @@ const mealsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // 🔹 fetch meals list
+
       .addCase(fetchMeals.pending, (state) => {
         state.status = 'loading';
         state.error = null;
@@ -40,7 +40,6 @@ const mealsSlice = createSlice({
         state.error = action.payload ?? 'Unknown error';
       })
 
-      // 🔹 fetch meal by id
       .addCase(fetchMealById.pending, (state) => {
         state.status = 'loading';
         state.error = null;

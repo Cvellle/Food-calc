@@ -6,7 +6,6 @@ import LocaleSwitcher from './LocaleSwitcher';
 import {useTranslations} from 'next-intl';
 import {endpoint} from '../../config/endpoint';
 import {
-  fetchCurrentUser,
   logout,
   selectCurrentUser,
   selectIsAuthenticated
@@ -47,7 +46,6 @@ export default function Navbar() {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(null);
     }
     document.addEventListener('mousedown', handleClick);
-    dispatch(fetchCurrentUser());
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
