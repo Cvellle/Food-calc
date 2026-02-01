@@ -10,7 +10,7 @@ import {NutrientSummary} from '../NutrientSummary';
 import {useTranslations} from 'next-intl';
 
 import {MyDayPicker} from '@/components/Calandar/MyDayPicker';
-import {format, isSameDay} from 'date-fns';
+import {format} from 'date-fns';
 
 export default function ClientIndex() {
   const [date, setDate] = useState<Date | undefined>(new Date());
