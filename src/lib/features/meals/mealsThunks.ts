@@ -8,7 +8,10 @@ export const fetchMeals = createAsyncThunk<
   {rejectValue: string}
 >('meals/fetchMeals', async (_, {rejectWithValue}) => {
   try {
-    const res = await fetch(`${endpoint}/meals`);
+    const res = await fetch(`${endpoint}/meals`, {
+      method: 'GET',
+      credentials: 'include'
+    });
 
     if (!res.ok) throw new Error('Failed');
 

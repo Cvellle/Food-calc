@@ -23,7 +23,7 @@ const nextConfig = {
       }
     ];
   },
-  appDir: true,
+  // appDir: true,
   trailingSlash: false
   // other options...
 };

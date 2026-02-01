@@ -44,7 +44,9 @@
         "client": "Pagina Client",
         "home": "Inizio",
         "nested": "Pagina annidata",
-        "newsArticle": "Articolo news #{articleId}"
+        "newsArticle": "Articolo news #{articleId}",
+        "login": "Accedi",
+        "register": "Registati"
     },
     "MealCard": {
         "name": "Nome del pasto",

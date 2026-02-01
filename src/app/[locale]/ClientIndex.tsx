@@ -9,6 +9,9 @@ import {fetchAndAddMeal} from '@/lib/features/meals/DailyMealsSlice';
 import {NutrientSummary} from '../NutrientSummary';
 import {useTranslations} from 'next-intl';
 
+import {useSelector} from 'react-redux';
+import {MyCalendar} from '@/components/Calandar/DayPicker';
+
 export default function ClientIndex() {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -17,6 +20,18 @@ export default function ClientIndex() {
   const loading = useAppSelector((s) => s.dailyMeals.loading);
 
   const {list, status, error} = useAppSelector((state) => state.meals);
+
+  // const fetchWithAuth = useFetchWithAuth();
+
+  // async function loadMeals() {
+  //   const res = await fetchWithAuth('/meals');
+  //   if (res.ok) {
+  //     const data = await res.json();
+  //     alert('ok');
+  //   } else {
+  //     alert('Failed to load meals');
+  //   }
+  // }
 
   useEffect(() => {
     if (status === 'idle') {

@@ -47,7 +47,9 @@ declare const messages: {
     "client": "Client page",
     "home": "Home",
     "nested": "Nested page",
-    "newsArticle": "News article #{articleId}"
+    "newsArticle": "News article #{articleId}",
+    "login": "Login",
+    "register": "Register"
   },
   "MealCard": {
     "name": " Meal name",
@@ -56,7 +58,7 @@ declare const messages: {
     "add": "Add meal"
   },
   "DailyMeals": {
-    "title": "Daily mMals",
+    "title": "Daily meals",
     "total": "Total nutrients"
   },
   "CreateMeal": {
