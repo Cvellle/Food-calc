@@ -4,6 +4,8 @@ import {removeMeal} from '@/lib/features/meals/DailyMealsSlice';
 import {useAppDispatch, useAppSelector} from '@/lib/hooks';
 import {useTranslations} from 'next-intl';
 import {format} from 'date-fns';
+import {useEffect} from 'react';
+import MyChart from '@/components/chart/MyChart';
 
 type DailyMealsListProps = {
   date?: Date;

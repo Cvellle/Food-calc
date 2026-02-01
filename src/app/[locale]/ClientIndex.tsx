@@ -11,6 +11,7 @@ import {useTranslations} from 'next-intl';
 
 import {MyDayPicker} from '@/components/Calandar/MyDayPicker';
 import {format} from 'date-fns';
+import MyChart from '@/components/chart/MyChart';
 
 export default function ClientIndex() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -18,7 +19,7 @@ export default function ClientIndex() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const t = useTranslations();
-
+  const meals = useAppSelector((s) => s.dailyMeals.meals);
   const loading = useAppSelector((s) => s.dailyMeals.loading);
 
   const {list, status, error} = useAppSelector((state) => state.meals);
@@ -63,7 +64,7 @@ export default function ClientIndex() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex flex-wrap md:flex-nowrap gap-6 p-4">
-        <div className="border rounded-xl p-4 bg-white shadow-sm h-fit w-fit mx-auto md:mx-0">
+        <div className="border rounded-xl md:p-4 bg-white shadow-sm h-fit w-fit mx-auto md:mx-0">
           <MyDayPicker selectedDate={date} onDateChange={handleDateChange} />
         </div>
         <div className="w-full md:w-[450px] shrink-0 p-4 bg-white rounded-xl shadow-sm">
@@ -72,7 +73,10 @@ export default function ClientIndex() {
             : 'Izaberite datum'}
           <DailyMealsList date={date} />
         </div>
-        <NutrientSummary />
+        <NutrientSummary selectedDate={date} />
+      </div>
+      <div className="my-[40px] md:my-0">
+        <MyChart meals={meals} />
       </div>
       <div
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-6 justify-center
