@@ -64,17 +64,24 @@ export function NutrientSummary({selectedDate}: Props) {
               return (
                 <li
                   key={n.nutrient}
-                  className={`flex flex-col sm:flex-row flex-wrap min-h-[50px] sm:min-h-[40px] items-start sm:items-center justify-between p-3 rounded-lg border-l-4 bg-white shadow-sm hover:translate-x-1 transition-transform ${
-                    isOver ? 'border-red-500' : 'border-emerald-500'
-                  }`}
+                  className={`grid grid-cols-1 sm:grid-cols-[1fr_auto_auto]
+    gap-y-1 sm:gap-x-4
+    min-h-[50px] sm:min-h-[40px]
+    items-start sm:items-center
+    p-3 rounded-lg border-l-4 bg-white shadow-sm
+    hover:translate-x-1 transition-transform
+    ${isOver ? 'border-red-500' : 'border-emerald-500'}
+  `}
                 >
-                  <span className="text-[14px] sm:text-[15px] font-bold text-stone-700 capitalize w-full sm:w-auto">
+                  <span className="text-[14px] sm:text-[15px] font-bold text-stone-700 capitalize">
                     {n.nutrient}
                   </span>
 
-                  <div className="flex items-center gap-1 mt-1 sm:mt-0 sm:mx-auto">
+                  <div className="flex items-baseline gap-1 justify-start">
                     <span
-                      className={`text-[14px] sm:text-[15px] font-mono font-semibold ${isOver ? 'text-red-600' : 'text-emerald-700'}`}
+                      className={`mr-auto text-[14px] sm:text-[15px] font-mono font-semibold ${
+                        isOver ? 'text-red-600' : 'text-emerald-700'
+                      }`}
                     >
                       {n.total.toFixed(2)}
                     </span>
@@ -84,7 +91,7 @@ export function NutrientSummary({selectedDate}: Props) {
                   </div>
 
                   {def?.max && (
-                    <span className="text-[11px] sm:text-[13px] text-stone-400 mt-1 sm:mt-0 sm:ml-4 italic whitespace-nowrap">
+                    <span className="text-[11px] sm:text-[13px] text-stone-400 italic whitespace-nowrap">
                       Limit: {def.max} {def.unit}
                     </span>
                   )}

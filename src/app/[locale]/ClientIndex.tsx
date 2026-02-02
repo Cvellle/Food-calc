@@ -57,14 +57,13 @@ export default function ClientIndex() {
     if (value) {
       setDate(value);
       const formattedDate = value.toISOString().split('T')[0];
-      // dispatch(fetchMeals(formattedDate));
     }
   };
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="flex flex-wrap md:flex-nowrap gap-6 p-4">
-        <div className="border rounded-xl md:p-4 bg-white shadow-sm h-fit w-fit mx-auto md:mx-0">
+      <div className="flex flex-wrap md:flex-nowrap gap-6 md:p-4">
+        <div className="w-[100%] my-start rounded-xl mt-[20px] md:mt-0 md:p-4 bg-white shadow-sm h-fit mx-auto md:mx-0">
           <MyDayPicker selectedDate={date} onDateChange={handleDateChange} />
         </div>
         <div className="w-full md:w-[450px] shrink-0 p-4 bg-white rounded-xl shadow-sm">
@@ -75,7 +74,7 @@ export default function ClientIndex() {
         </div>
         <NutrientSummary selectedDate={date} />
       </div>
-      <div className="my-[40px] md:my-0">
+      <div className="my-[40px] md:my-[5px] md:mb-[45px] px-4">
         <MyChart meals={meals} />
       </div>
       <div

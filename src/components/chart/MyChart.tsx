@@ -71,7 +71,7 @@ export default function NutrientBarChart({meals}: Props) {
             {nutrientConfig.key}
           </h3>
           <p className="text-sm text-slate-500 font-medium italic">
-            Dnevni Limit:{' '}
+            Daily Limit:{' '}
             <span className="text-red-600 font-bold">
               {MAX_LIMIT} {nutrientConfig.unit}
             </span>

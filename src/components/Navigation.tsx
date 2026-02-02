@@ -65,7 +65,7 @@ export default function Navbar() {
 
   const UserAvatar = () => (
     <div className="flex items-center gap-2">
-      <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm uppercase">
+      <div className="w-8 h-8 rounded-full bg-emerald-800 flex items-center justify-center text-white font-bold text-sm uppercase">
         {currentUser?.name?.charAt(0)}
       </div>
       <div className="flex flex-col">
@@ -77,9 +77,15 @@ export default function Navbar() {
   );
 
   return (
-    <div ref={containerRef} className="w-full border-b bg-white">
+    <div
+      ref={containerRef}
+      className="w-full border-b border-emerald-600 bg-white"
+    >
       <nav className="flex justify-between w-full max-w-7xl mx-auto px-4 py-4 items-center relative">
-        <Link href={'/'} className="font-bold text-xl shrink-0">
+        <Link
+          href={'/'}
+          className="text-2xl sm:text-3xl font-serif font-bold text-center text-emerald-600 tracking-tight italic"
+        >
           Food calc
         </Link>
 
@@ -89,7 +95,7 @@ export default function Navbar() {
               {item.type === 'link' ? (
                 <Link
                   href={item.href}
-                  className="hover:text-blue-600 transition text-sm font-medium"
+                  className="hover:text-emerald-800 transition text-sm font-medium"
                 >
                   {item.label}
                 </Link>
@@ -101,12 +107,15 @@ export default function Navbar() {
 
           {!isAuthenticated ? (
             <div className="flex items-center gap-4">
-              <Link href={'/register'} className="text-sm hover:text-blue-600">
+              <Link
+                href={'/register'}
+                className="text-sm hover:text-emerald-800"
+              >
                 {t('register')}
               </Link>
               <Link
                 href={'/login'}
-                className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                className="text-sm font-semibold text-emerald-800 hover:text-emerald-800"
               >
                 {t('login')}
               </Link>
@@ -116,7 +125,7 @@ export default function Navbar() {
               <UserAvatar />
               <button
                 onClick={handleLogout}
-                className="cursor-pointer text-sm text-red-600 hover:underline"
+                className="cursor-pointer text-sm text-red-800 hover:underline"
               >
                 {'Log out'}
               </button>
@@ -160,7 +169,7 @@ export default function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="font-bold text-blue-600"
+                    className="font-bold text-emerald-800"
                   >
                     {t('login')}
                   </Link>
