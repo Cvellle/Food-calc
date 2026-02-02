@@ -51,7 +51,7 @@ export function DailyMealsList({date}: DailyMealsListProps) {
             <button
               onClick={() => dispatch(removeMeal(index))}
               className="cursor-pointer rounded-md bg-red-600 px-3
-                py-1 text-sm font-medium text-white hover:bg-red-600 transition"
+                py-1 text-sm font-medium text-white hover:bg-red-500 transition"
             >
               Remove
             </button>
