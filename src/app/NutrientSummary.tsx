@@ -1,63 +1,26 @@
-'use client';
-
-import {useMemo} from 'react';
-import {useAppSelector} from '@/lib/hooks';
-import {selectMeals} from '@/lib/features/meals/DailyMealsSlice';
 import {NUTRIENTS} from '@/lib/nutrition/nutrients-List';
-import {useTranslations} from 'next-intl';
-import {isSameDay} from 'date-fns';
+import type {NutrientEntry} from '@/lib/nutrition/types';
 
-interface Props {
-  selectedDate: Date | undefined;
-}
+type NutrientSummaryProps = {
+  nutrients: NutrientEntry[];
+  title: string;
+};
 
-export function NutrientSummary({selectedDate}: Props) {
-  const allMeals = useAppSelector(selectMeals);
-  const t = useTranslations();
-
-  const filteredMeals = useMemo(() => {
-    if (!selectedDate) return [];
-    return allMeals.filter((meal: any) => {
-      if (!meal.date) return false;
-      try {
-        return isSameDay(new Date(meal.date), selectedDate);
-      } catch {
-        return false;
-      }
-    });
-  }, [allMeals, selectedDate]);
-
-  const dailyNutrients = useMemo(() => {
-    const totals: Record<
-      string,
-      {nutrient: string; total: number; unit: string}
-    > = {};
-    filteredMeals.forEach((meal) => {
-      meal.nutrients.forEach((n: any) => {
-        if (!totals[n.nutrient]) {
-          totals[n.nutrient] = {...n};
-        } else {
-          totals[n.nutrient].total += n.total;
-        }
-      });
-    });
-    return Object.values(totals);
-  }, [filteredMeals]);
-
+export function NutrientSummary({nutrients, title}: NutrientSummaryProps) {
   return (
     <div className="w-full max-w-md mx-auto overflow-hidden rounded-xl border-t-8 border-emerald-600 bg-stone-50 shadow-lg transition-all duration-300">
       <div className="p-4 sm:p-6">
         <h2 className="text-2xl sm:text-3xl font-serif font-bold text-center text-red-700 mb-6 tracking-tight italic">
-          {t('DailyMeals.total')}
+          {title}
         </h2>
 
-        {dailyNutrients.length === 0 ? (
+        {nutrients.length === 0 ? (
           <p className="text-center text-stone-400 italic py-6 text-sm">
             No meals for this date.
           </p>
         ) : (
           <ul className="space-y-3">
-            {dailyNutrients.map((n) => {
+            {nutrients.map((n) => {
               const def = NUTRIENTS[n.nutrient as keyof typeof NUTRIENTS];
               const isOver = def?.max && n.total > def.max;
 

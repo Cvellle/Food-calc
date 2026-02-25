@@ -47,7 +47,7 @@ export default function Navbar() {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(null);
     }
     document.addEventListener('mousedown', handleClick);
-    dispatch(fetchCurrentUser());
+    // dispatch(fetchCurrentUser());
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 

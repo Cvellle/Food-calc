@@ -60,13 +60,15 @@ type DailyMealsState = {
   suggestions: Suggestion[];
   loading: boolean;
   error: string | null;
+  selectedDate: string;
 };
 
 const initialState: DailyMealsState = {
   meals: [],
   suggestions: [],
   loading: false,
-  error: null
+  error: null,
+  selectedDate: new Date().toISOString()
 };
 
 const dailyMealsSlice = createSlice({
@@ -81,6 +83,9 @@ const dailyMealsSlice = createSlice({
     },
     setSuggestions(state, action: PayloadAction<Suggestion[]>) {
       state.suggestions = action.payload;
+    },
+    setSelectedDate(state, action: PayloadAction<string>) {
+      state.selectedDate = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -100,6 +105,10 @@ const dailyMealsSlice = createSlice({
   }
 });
 
-export const {removeMeal, clearDay, setSuggestions} = dailyMealsSlice.actions;
+export const selectSelectedDate = (state: RootState): string =>
+  state.dailyMeals.selectedDate;
+
+export const {removeMeal, clearDay, setSuggestions, setSelectedDate} =
+  dailyMealsSlice.actions;
 
 export default dailyMealsSlice.reducer;
