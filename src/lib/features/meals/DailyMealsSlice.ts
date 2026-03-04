@@ -1,73 +1,16 @@
-import type {
-  MealResponse,
-  NutrientEntry,
-  Suggestion
-} from '@/lib/nutrition/types';
-import {
-  createSlice,
-  createAsyncThunk,
-  PayloadAction,
-  createSelector
-} from '@reduxjs/toolkit';
-import {endpoint} from '../../../../config/endpoint';
-import {RootState} from '@/lib/store';
-
-export const selectMeals = (state: RootState) => state.dailyMeals.meals;
-
-export const selectAggregatedNutrients = createSelector(
-  [selectMeals],
-  (meals) => {
-    const totals: Record<string, NutrientEntry> = {};
-
-    meals.forEach((meal) => {
-      meal.nutrients.forEach((n) => {
-        if (!totals[n.nutrient]) {
-          totals[n.nutrient] = {...n};
-        } else {
-          totals[n.nutrient].total += n.total;
-        }
-      });
-    });
-
-    return totals;
-  }
-);
-
-export const fetchAndAddMeal = createAsyncThunk<
-  MealResponse,
-  {mealId: string; date: Date | undefined},
-  {rejectValue: string}
->('dailyMeals/fetchAndAddMeal', async ({mealId, date}, {rejectWithValue}) => {
-  try {
-    const res = await fetch(`${endpoint}/meals/${mealId}`);
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch meal');
-    }
-
-    const data = (await res.json()) as MealResponse;
-    return {
-      ...data,
-      date: date ? date.toISOString() : new Date().toISOString()
-    };
-  } catch {
-    return rejectWithValue('Unable to load meal');
-  }
-});
+import type {MealResponse, Suggestion} from '@/lib/nutrition/types';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import type {RootState} from '@/lib/store';
 
 type DailyMealsState = {
   meals: MealResponse[];
   suggestions: Suggestion[];
-  loading: boolean;
-  error: string | null;
   selectedDate: string;
 };
 
 const initialState: DailyMealsState = {
   meals: [],
   suggestions: [],
-  loading: false,
-  error: null,
   selectedDate: new Date().toISOString()
 };
 
@@ -75,6 +18,9 @@ const dailyMealsSlice = createSlice({
   name: 'dailyMeals',
   initialState,
   reducers: {
+    addMeal(state, action: PayloadAction<MealResponse>) {
+      state.meals.push(action.payload);
+    },
     removeMeal(state, action: PayloadAction<number>) {
       state.meals.splice(action.payload, 1);
     },
@@ -87,28 +33,13 @@ const dailyMealsSlice = createSlice({
     setSelectedDate(state, action: PayloadAction<string>) {
       state.selectedDate = action.payload;
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchAndAddMeal.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAndAddMeal.fulfilled, (state, action) => {
-        state.loading = false;
-        state.meals.push(action.payload);
-      })
-      .addCase(fetchAndAddMeal.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload ?? 'Unknown error';
-      });
   }
 });
 
 export const selectSelectedDate = (state: RootState): string =>
   state.dailyMeals.selectedDate;
 
-export const {removeMeal, clearDay, setSuggestions, setSelectedDate} =
+export const {addMeal, removeMeal, clearDay, setSuggestions, setSelectedDate} =
   dailyMealsSlice.actions;
 
 export default dailyMealsSlice.reducer;

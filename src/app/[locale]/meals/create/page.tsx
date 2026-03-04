@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import {createMealAsync} from '@/services/meal.service';
 import {useTranslations} from 'next-intl';
 import {endpoint} from '../../../../../config/endpoint';
+import {ItemCombobox} from '@/components/ItemCombobox';
 
 type Item = {
   itemId: number | '';
@@ -11,12 +12,18 @@ type Item = {
   measurement: 'grams' | 'unit';
 };
 
+type SelectItem = {
+  id: string | number;
+  name: string;
+  category?: string;
+};
+
 export default function CreateMealPage() {
   const [name, setName] = useState('');
   const [items, setItems] = useState<Item[]>([
     {itemId: '', quantity: '', measurement: 'grams'}
   ]);
-  const [selectItems, setSelectItems] = useState([]);
+  const [selectItems, setSelectItems] = useState<SelectItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -117,32 +124,19 @@ export default function CreateMealPage() {
         <div>
           <label className="block font-semibold mb-2">Items</label>
           {items.map((item, i) => (
-            <div key={i} className="flex flex-wrap gap-2 mb-3 items-end">
-              <div className="flex flex-col flex-1">
+            <div key={i} className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto_auto] gap-2 mb-3 items-end">
+              <div className="flex flex-col">
                 <label htmlFor={`itemId-${i}`} className="text-sm mb-1">
                   Item
                 </label>
-                <select
-                  id={`measurement-${i}`}
-                  value={item.itemId || ''}
-                  onChange={(e) =>
-                    handleItemChange(i, 'itemId', e.target.value)
-                  }
-                  className="py-[0] h-[35px] border border-gray-300 rounded px-2 py-1"
-                  required
-                >
-                  <option value="" disabled={item.itemId !== ''}></option>
-
-                  {selectItems?.map(
-                    (ingredient: {id: string | number; name: string}, i) => (
-                      <option key={i} value={ingredient.id}>
-                        {ingredient.name}
-                      </option>
-                    )
-                  )}
-                </select>
+                <ItemCombobox
+                  id={`itemId-${i}`}
+                  items={selectItems}
+                  value={item.itemId}
+                  onChange={(id) => handleItemChange(i, 'itemId', id)}
+                />
               </div>
-              <div className="flex flex-col flex-1">
+              <div className="flex flex-col">
                 <label htmlFor={`quantity-${i}`} className="text-sm mb-1">
                   Quantity
                 </label>
@@ -158,7 +152,7 @@ export default function CreateMealPage() {
                       e.target.value === '' ? '' : Number(e.target.value)
                     )
                   }
-                  className="border border-gray-300 rounded px-2 py-[0] h-[35px]"
+                  className="border border-gray-300 rounded px-2 h-[35px]"
                   required
                 />
               </div>
@@ -172,7 +166,7 @@ export default function CreateMealPage() {
                   onChange={(e) =>
                     handleItemChange(i, 'measurement', e.target.value)
                   }
-                  className="py-[0] h-[35px] border border-gray-300 rounded px-2 py-1"
+                  className="h-[35px] border border-gray-300 rounded px-2"
                 >
                   <option value="grams">grams</option>
                   <option value="unit">unit</option>
@@ -182,8 +176,8 @@ export default function CreateMealPage() {
                 disabled={items.length === 1}
                 type="button"
                 onClick={() => removeItem(i)}
-                className={`mb-[5px] cursor-pointer font-bold px-2
-                  ${items.length === 1 ? 'text-gray-500' : 'text-red-500'}`}
+                className={`self-end h-[35px] w-[35px] flex items-center justify-center rounded cursor-pointer font-bold text-lg
+                  ${items.length === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:bg-red-50'}`}
                 aria-label="Remove item"
               >
                 &times;

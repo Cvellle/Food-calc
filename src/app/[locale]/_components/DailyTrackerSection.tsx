@@ -3,11 +3,13 @@
 import {useMemo} from 'react';
 import {useAppDispatch, useAppSelector} from '@/lib/hooks';
 import {
-  selectMeals,
   selectSelectedDate,
-  setSelectedDate,
-  removeMeal
+  setSelectedDate
 } from '@/lib/features/meals/DailyMealsSlice';
+import {
+  useAllMealsQuery,
+  useRemoveMealFromDayMutation
+} from '@/lib/features/meals/dailyMealsApi';
 import {useTranslations} from 'next-intl';
 import {isSameDay, format} from 'date-fns';
 import {MyDayPicker} from '@/components/Calandar/MyDayPicker';
@@ -21,7 +23,8 @@ export function DailyTrackerSection() {
   const t = useTranslations();
 
   const selectedDateISO = useAppSelector(selectSelectedDate);
-  const allMeals = useAppSelector(selectMeals);
+  const {data: allMeals = []} = useAllMealsQuery();
+  const [removeMealFromDay] = useRemoveMealFromDayMutation();
 
   const date = new Date(selectedDateISO);
 
@@ -65,7 +68,7 @@ export function DailyTrackerSection() {
           {format(date, 'dd.MM.yyyy')}
           <DailyMealsList
             meals={filteredMeals}
-            onRemove={(index) => dispatch(removeMeal(index))}
+            onRemove={(index) => removeMealFromDay(index)}
             title={t('DailyMeals.title')}
           />
         </div>

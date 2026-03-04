@@ -55,7 +55,8 @@ declare const messages: {
     "name": " Meal name",
     "allIngredients": "All ingredients",
     "see": "See meal",
-    "add": "Add meal"
+    "add": "Add meal",
+    "search": "Search meals…"
   },
   "DailyMeals": {
     "title": "Daily meals",

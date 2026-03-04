@@ -52,7 +52,8 @@
         "name": "Nome del pasto",
         "allIngredients": "Tutti gli ingredienti",
         "see": "Vedi il pasto",
-        "add": "Aggiungi il pasto"
+        "add": "Aggiungi il pasto",
+        "search": "Cerca pasti…"
     },
     "DailyMeals": {
         "title": "I pasti della giornata",
