@@ -1,26 +1,48 @@
 import {NextResponse} from 'next/server';
-import {prisma} from '@/lib/prisma';
+import {eq} from 'drizzle-orm';
+import {db} from '@/lib/db';
+import {meals, mealItems, items} from '@/lib/db/schema';
 
 export async function GET() {
   try {
-    const meals = await prisma.meals.findMany({
-      orderBy: {id: 'desc'},
-      include: {
-        meal_items: {
-          include: {items: {select: {name: true}}}
-        }
-      }
-    });
+    const rows = await db
+      .select({
+        meal_id: meals.id,
+        meal_name: meals.name,
+        item_name: items.name
+      })
+      .from(meals)
+      .leftJoin(mealItems, eq(mealItems.meal_id, meals.id))
+      .leftJoin(items, eq(items.id, mealItems.item_id))
+      .orderBy(meals.id);
 
-    // Transform to the shape the frontend MealListItem type expects
-    const payload = meals.map((meal) => ({
-      id: meal.id,
-      name: meal.name,
-      date: undefined,
-      ingredients_preview: meal.meal_items
-        .map((mi) => mi.items.name)
-        .join(', ')
-    }));
+    // Group by meal
+    const mealMap = new Map<
+      number,
+      {id: number; name: string; items: string[]}
+    >();
+
+    for (const row of rows) {
+      if (!mealMap.has(row.meal_id)) {
+        mealMap.set(row.meal_id, {
+          id: row.meal_id,
+          name: row.meal_name,
+          items: []
+        });
+      }
+      if (row.item_name) {
+        mealMap.get(row.meal_id)!.items.push(row.item_name);
+      }
+    }
+
+    const payload = Array.from(mealMap.values())
+      .reverse()
+      .map((m) => ({
+        id: m.id,
+        name: m.name,
+        date: undefined,
+        ingredients_preview: m.items.join(', ')
+      }));
 
     return NextResponse.json(payload);
   } catch (err) {

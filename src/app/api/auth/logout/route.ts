@@ -1,7 +1,9 @@
 import {cookies} from 'next/headers';
 import {NextResponse} from 'next/server';
+import {eq} from 'drizzle-orm';
 import {verifyRefreshToken} from '@/lib/auth/jwt';
-import {prisma} from '@/lib/prisma';
+import {db} from '@/lib/db';
+import {users} from '@/lib/db/schema';
 
 export async function POST() {
   const cookieStore = await cookies();
@@ -10,10 +12,11 @@ export async function POST() {
   if (token) {
     try {
       const payload = verifyRefreshToken(token);
-      await prisma.users.update({
-        where: {id: payload.sub},
-        data: {refresh_token: null}
-      }).catch(() => null);
+      await db
+        .update(users)
+        .set({refresh_token: null})
+        .where(eq(users.id, payload.sub))
+        .catch(() => null);
     } catch {
       // ignore invalid token on logout
     }

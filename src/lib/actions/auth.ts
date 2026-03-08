@@ -2,7 +2,9 @@
 
 import {cookies} from 'next/headers';
 import bcrypt from 'bcryptjs';
-import {prisma} from '@/lib/prisma';
+import {eq} from 'drizzle-orm';
+import {db} from '@/lib/db';
+import {users} from '@/lib/db/schema';
 import {signAccessToken, signRefreshToken} from '@/lib/auth/jwt';
 
 export interface AuthResult {
@@ -16,7 +18,7 @@ export async function loginAction(
   password: string
 ): Promise<AuthResult> {
   try {
-    const user = await prisma.users.findUnique({where: {email}});
+    const [user] = await db.select().from(users).where(eq(users.email, email));
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return {success: false, error: 'Invalid credentials'};
@@ -26,10 +28,10 @@ export async function loginAction(
     const accessToken = signAccessToken(payload);
     const refreshToken = signRefreshToken(payload);
 
-    await prisma.users.update({
-      where: {id: user.id},
-      data: {refresh_token: refreshToken}
-    });
+    await db
+      .update(users)
+      .set({refresh_token: refreshToken})
+      .where(eq(users.id, user.id));
 
     const cookieStore = await cookies();
     const isProduction = process.env.NODE_ENV === 'production';
@@ -65,15 +67,19 @@ export async function registerAction(
   password: string
 ): Promise<AuthResult> {
   try {
-    const existing = await prisma.users.findUnique({where: {email}});
+    const [existing] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email));
     if (existing) {
       return {success: false, error: 'Email already registered'};
     }
 
     const hashed = await bcrypt.hash(password, 12);
-    const user = await prisma.users.create({
-      data: {name, email, password: hashed}
-    });
+    const [user] = await db
+      .insert(users)
+      .values({name, email, password: hashed})
+      .returning();
 
     return {
       success: true,

@@ -1,5 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {prisma} from '@/lib/prisma';
+import {eq} from 'drizzle-orm';
+import {db} from '@/lib/db';
+import {meals} from '@/lib/db/schema';
 
 export async function PATCH(
   req: NextRequest,
@@ -15,10 +17,11 @@ export async function PATCH(
   try {
     const {score} = await req.json();
 
-    const meal = await prisma.meals.update({
-      where: {id: mealId},
-      data: {health_score: score}
-    });
+    const [meal] = await db
+      .update(meals)
+      .set({health_score: String(score)})
+      .where(eq(meals.id, mealId))
+      .returning();
 
     return NextResponse.json(meal);
   } catch {

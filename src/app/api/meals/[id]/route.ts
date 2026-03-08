@@ -1,5 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {prisma} from '@/lib/prisma';
+import {eq} from 'drizzle-orm';
+import {db} from '@/lib/db';
+import {meals, mealItems, items, itemNutrients, nutrients} from '@/lib/db/schema';
 
 export async function GET(
   _req: NextRequest,
@@ -13,39 +15,58 @@ export async function GET(
   }
 
   try {
-    const meal = await prisma.meals.findUnique({
-      where: {id: mealId},
-      include: {
-        meal_items: {
-          include: {
-            items: {
-              include: {
-                item_nutrients: {include: {nutrients: true}}
-              }
-            }
-          }
-        }
-      }
-    });
+    const [meal] = await db
+      .select()
+      .from(meals)
+      .where(eq(meals.id, mealId));
 
     if (!meal) {
       return NextResponse.json({error: 'Meal not found'}, {status: 404});
     }
 
-    // Aggregate nutrients across all meal items
-    // item_nutrients.per_100g × (meal_item.quantity / 100) = contribution
-    const nutrientMap = new Map<string, {nutrient: string; unit: string; total: number}>();
+    // Fetch meal items with their items and nutrients in one query
+    const rows = await db
+      .select({
+        mi_quantity: mealItems.quantity,
+        mi_measurement: mealItems.measurement,
+        item_name: items.name,
+        per_100g: itemNutrients.per_100g,
+        nutrient_name: nutrients.name,
+        nutrient_unit: nutrients.unit
+      })
+      .from(mealItems)
+      .innerJoin(items, eq(items.id, mealItems.item_id))
+      .leftJoin(itemNutrients, eq(itemNutrients.item_id, items.id))
+      .leftJoin(nutrients, eq(nutrients.id, itemNutrients.nutrient_id))
+      .where(eq(mealItems.meal_id, mealId));
 
-    for (const mi of meal.meal_items) {
-      const factor = parseFloat(mi.quantity.toString()) / 100;
-      for (const n of mi.items.item_nutrients) {
-        const key = n.nutrients.name;
-        const contribution = parseFloat(n.per_100g.toString()) * factor;
-        const existing = nutrientMap.get(key);
+    // Aggregate nutrients
+    const nutrientMap = new Map<string, {nutrient: string; unit: string; total: number}>();
+    const itemSet = new Map<string, {name: string; quantity: number; measurement: string}>();
+
+    for (const row of rows) {
+      // Track unique items
+      if (!itemSet.has(row.item_name)) {
+        itemSet.set(row.item_name, {
+          name: row.item_name,
+          quantity: parseFloat(row.mi_quantity),
+          measurement: row.mi_measurement
+        });
+      }
+
+      // Aggregate nutrients
+      if (row.nutrient_name && row.per_100g) {
+        const factor = parseFloat(row.mi_quantity) / 100;
+        const contribution = parseFloat(row.per_100g) * factor;
+        const existing = nutrientMap.get(row.nutrient_name);
         if (existing) {
           existing.total += contribution;
         } else {
-          nutrientMap.set(key, {nutrient: key, unit: n.nutrients.unit, total: contribution});
+          nutrientMap.set(row.nutrient_name, {
+            nutrient: row.nutrient_name,
+            unit: row.nutrient_unit!,
+            total: contribution
+          });
         }
       }
     }
@@ -54,11 +75,7 @@ export async function GET(
       id: meal.id,
       name: meal.name,
       nutrients: Array.from(nutrientMap.values()),
-      items: meal.meal_items.map((mi) => ({
-        name: mi.items.name,
-        quantity: parseFloat(mi.quantity.toString()),
-        measurement: mi.measurement
-      }))
+      items: Array.from(itemSet.values())
     });
   } catch (err) {
     console.error('[GET /api/meals/:id]', err);

@@ -1,7 +1,9 @@
 import {cookies} from 'next/headers';
 import {NextResponse} from 'next/server';
+import {eq} from 'drizzle-orm';
 import {verifyAccessToken} from '@/lib/auth/jwt';
-import {prisma} from '@/lib/prisma';
+import {db} from '@/lib/db';
+import {users} from '@/lib/db/schema';
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -13,10 +15,16 @@ export async function GET() {
 
   try {
     const payload = verifyAccessToken(token);
-    const user = await prisma.users.findUnique({
-      where: {id: payload.sub},
-      select: {id: true, name: true, email: true, roles: true, profile_image: true}
-    });
+    const [user] = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        roles: users.roles,
+        profile_image: users.profile_image
+      })
+      .from(users)
+      .where(eq(users.id, payload.sub));
 
     if (!user) {
       return NextResponse.json({error: 'User not found'}, {status: 404});

@@ -1,7 +1,9 @@
 import {cookies} from 'next/headers';
 import {NextResponse} from 'next/server';
+import {and, eq} from 'drizzle-orm';
 import {verifyRefreshToken, signAccessToken} from '@/lib/auth/jwt';
-import {prisma} from '@/lib/prisma';
+import {db} from '@/lib/db';
+import {users} from '@/lib/db/schema';
 
 export async function POST() {
   const cookieStore = await cookies();
@@ -15,9 +17,10 @@ export async function POST() {
     const payload = verifyRefreshToken(token);
 
     // Verify it matches what's stored in the users table
-    const user = await prisma.users.findFirst({
-      where: {id: payload.sub, refresh_token: token}
-    });
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(and(eq(users.id, payload.sub), eq(users.refresh_token, token)));
 
     if (!user) {
       return NextResponse.json({error: 'Token invalid or expired'}, {status: 401});
