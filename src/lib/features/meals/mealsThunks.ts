@@ -1,6 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import type {MealListItem, MealDetails} from './types';
-import {endpoint} from '../../../../config/endpoint';
 
 export const fetchMeals = createAsyncThunk<
   MealListItem[],
@@ -8,7 +7,7 @@ export const fetchMeals = createAsyncThunk<
   {rejectValue: string}
 >('meals/fetchMeals', async (_, {rejectWithValue}) => {
   try {
-    const res = await fetch(`${endpoint}/meals`, {
+    const res = await fetch('/api/meals', {
       method: 'GET',
       credentials: 'include'
     });
@@ -27,7 +26,7 @@ export const fetchMealById = createAsyncThunk<
   {rejectValue: string}
 >('meals/fetchMealById', async (mealId, {rejectWithValue}) => {
   try {
-    const res = await fetch(`${endpoint}/meals/${mealId}`);
+    const res = await fetch(`/api/meals/${mealId}`, {credentials: 'include'});
 
     if (!res.ok) throw new Error('Failed');
 

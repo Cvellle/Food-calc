@@ -2,55 +2,48 @@
 
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {useRouter} from 'next/navigation'; // Dodato za redirect
+import {useRouter} from 'next/navigation';
 import {AuthCard} from '@/components/AuthCard';
 import {Input} from '@/components/Input';
 import {Button} from '@/components/Button';
 import Link from 'next/link';
-import {endpoint} from '../../../../../config/endpoint';
+import {loginAction} from '@/lib/actions/auth';
 import {fetchCurrentUser} from '@/lib/features/auth/authSlice';
 import {AppDispatch} from '@/lib/store';
 
 export default function LoginPage() {
   const dispatch: AppDispatch = useDispatch();
-  const router = useRouter(); // Inicijalizacija routera
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false); // Stanje za uspeh
+  const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setSuccess(false);
-
-    const form = new FormData(e.currentTarget);
-    const payload = {
-      email: form.get('email') as string,
-      password: form.get('password') as string
-    };
 
     try {
-      const res = await fetch(`${endpoint}/auth/login`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        credentials: 'include',
-        body: JSON.stringify(payload)
-      });
+      const form = new FormData(e.currentTarget);
+      const result = await loginAction(
+        form.get('email') as string,
+        form.get('password') as string
+      );
 
-      if (!res.ok) throw new Error('Login failed');
+      if (!result.success) {
+        setError(result.error ?? 'Login failed');
+        return;
+      }
 
       await dispatch(fetchCurrentUser());
-
-      setSuccess(true); // Prikazujemo uspeh
-
-      // Kratka pauza da korisnik vidi poruku, pa redirect
+      setSuccess(true);
       setTimeout(() => {
         router.push('/');
-        router.refresh(); // Osvežava server komponente kako bi prepoznale novu sesiju
+        router.refresh();
       }, 1500);
-    } catch (err) {
-      setError('Invalid credentials');
+    } catch {
+      setError('Unexpected error. Please try again.');
+    } finally {
       setLoading(false);
     }
   }
@@ -67,7 +60,6 @@ export default function LoginPage() {
               placeholder="Password"
               required
             />
-
             <Button disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </Button>

@@ -1,11 +1,10 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {endpoint} from '../../../../config/endpoint';
 import type {MealResponse} from '@/lib/nutrition/types';
 import {addMeal, removeMeal} from './DailyMealsSlice';
 
 export const dailyMealsApi = createApi({
   reducerPath: 'dailyMealsApi',
-  baseQuery: fetchBaseQuery({baseUrl: endpoint}),
+  baseQuery: fetchBaseQuery({baseUrl: '/api', credentials: 'include'}),
   tagTypes: ['DailyMeals'],
   endpoints: (builder) => ({
     allMeals: builder.query<MealResponse[], void>({
@@ -26,7 +25,7 @@ export const dailyMealsApi = createApi({
     addMealToDay: builder.mutation<MealResponse, {mealId: string; date: string}>({
       queryFn: async ({mealId, date}, api) => {
         try {
-          const res = await fetch(`${endpoint}/meals/${mealId}`);
+          const res = await fetch(`/api/meals/${mealId}`, {credentials: 'include'});
           if (!res.ok) throw new Error('Failed to fetch meal');
           const data = (await res.json()) as MealResponse;
           const mealWithDate = {...data, date};

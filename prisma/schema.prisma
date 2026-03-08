@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ingredients {
+  id         Int       @id @default(autoincrement())
+  name       String
+  quantity   Int?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model item_nutrients {
+  item_id     Int
+  nutrient_id Int
+  per_100g    Decimal   @db.Decimal(10, 2)
+  per_unit    Decimal?  @db.Decimal(10, 2)
+  items       items     @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  nutrients   nutrients @relation(fields: [nutrient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([item_id, nutrient_id])
+}
+
+model items {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  category       String
+  item_nutrients item_nutrients[]
+  meal_items     meal_items[]
+}
+
+model meal_items {
+  meal_id     Int
+  item_id     Int
+  quantity    Decimal @db.Decimal(6, 2)
+  measurement String  @default("grams")
+  id          Int     @default(autoincrement())
+  items       items   @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  meals       meals   @relation(fields: [meal_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([meal_id, item_id], map: "meal_items_meal_id_item_id_unique")
+}
+
+model meals {
+  id           Int          @id @default(autoincrement())
+  name         String
+  health_score Decimal?     @db.Decimal
+  meal_items   meal_items[]
+}
+
+model nutrient_thresholds {
+  nutrient_id  Int      @id
+  nutrient_key String?
+  unit         String?
+  min_value    Decimal? @db.Decimal
+  max_value    Decimal? @db.Decimal
+}
+
+model nutrients {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  unit           String
+  item_nutrients item_nutrients[]
+}
+
+model users {
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String    @unique
+  password      String
+  roles         Json?     @default("{\"User\": 2001}")
+  refresh_token String?
+  profile_image Json?
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+}

@@ -28,7 +28,7 @@ export const fetchCurrentUser = createAsyncThunk(
   'auth/fetchCurrentUser',
   async (_, thunkAPI) => {
     try {
-      const response = await fetchWithAuth('/auth/me');
+      const response = await fetchWithAuth('/api/auth/me');
       if (!response.ok) throw new Error('Unauthorized');
       const data = await response.json();
       return data;

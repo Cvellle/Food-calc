@@ -3,7 +3,6 @@
 import {useEffect, useState} from 'react';
 import {createMealAsync} from '@/services/meal.service';
 import {useTranslations} from 'next-intl';
-import {endpoint} from '../../../../../config/endpoint';
 import {ItemCombobox} from '@/components/ItemCombobox';
 
 type Item = {
@@ -32,7 +31,7 @@ export default function CreateMealPage() {
   useEffect(() => {
     const getItems = async () => {
       try {
-        const res = await fetch(`${endpoint}/items`);
+        const res = await fetch('/api/items');
         if (!res.ok) throw new Error('Failed');
         const list = await res.json();
         setSelectItems(list);

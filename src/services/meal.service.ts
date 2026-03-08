@@ -1,13 +1,13 @@
 import {runPrediction} from '@/lib/nutrition/runPrediction';
-import {endpoint} from '../../config/endpoint';
 
 export const createMealAsync = async (bodyProps: {
   name: string;
   items: any[];
 }) => {
-  const res = await fetch(`${endpoint}/meals/create`, {
+  const res = await fetch('/api/meals/create', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
+    credentials: 'include',
     body: JSON.stringify({
       name: bodyProps.name,
       items: bodyProps.items
@@ -21,7 +21,7 @@ export const createMealAsync = async (bodyProps: {
 
   const data = await res.json();
 
-  // TensorFlow
+  // TensorFlow health score
   const score = await runPrediction(data.id);
   await updateMealHealthScore(data.id, score);
 
@@ -29,11 +29,10 @@ export const createMealAsync = async (bodyProps: {
 };
 
 export async function updateMealHealthScore(mealId: number, score: number) {
-  const res = await fetch(`${endpoint}/meals/${mealId}/score`, {
+  const res = await fetch(`/api/meals/${mealId}/score`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: {'Content-Type': 'application/json'},
+    credentials: 'include',
     body: JSON.stringify({mealId, score})
   });
 

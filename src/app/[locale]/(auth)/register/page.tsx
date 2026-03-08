@@ -6,7 +6,7 @@ import {AuthCard} from '@/components/AuthCard';
 import {Input} from '@/components/Input';
 import {Button} from '@/components/Button';
 import Link from 'next/link';
-import {endpoint} from '../../../../../config/endpoint';
+import {registerAction} from '@/lib/actions/auth';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -18,34 +18,24 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setSuccess(false);
-
-    const form = new FormData(e.currentTarget);
-    const payload = {
-      name: form.get('name'),
-      email: form.get('email'),
-      password: form.get('password')
-    };
 
     try {
-      const res = await fetch(`${endpoint}/auth/register`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
+      const form = new FormData(e.currentTarget);
+      const result = await registerAction(
+        form.get('name') as string,
+        form.get('email') as string,
+        form.get('password') as string
+      );
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || 'Registration failed');
+      if (!result.success) {
+        setError(result.error ?? 'Registration failed');
+        return;
       }
 
       setSuccess(true);
-
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000);
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+      setTimeout(() => router.push('/login'), 2000);
+    } catch {
+      setError('Unexpected error. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -64,7 +54,6 @@ export default function RegisterPage() {
               placeholder="Password"
               required
             />
-
             <Button disabled={loading}>
               {loading ? 'Creating...' : 'Sign up'}
             </Button>

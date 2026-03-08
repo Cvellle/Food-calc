@@ -1,22 +1,15 @@
-import {endpoint} from '../../config/endpoint';
-
-const BASE_URL = endpoint || 'http://localhost:3000';
-
+// Cookies (accessToken/refreshToken) are managed server-side via httpOnly cookies.
+// Authorization header is no longer needed — cookies are sent automatically.
 export const fetchWithAuth = async (
   url: string,
   options: RequestInit = {},
   dispatch?: any,
-  logoutAction?: any,
-  accessToken?: string
+  logoutAction?: any
 ) => {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>)
   };
-
-  if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-  }
 
   const config: RequestInit = {
     ...options,
@@ -25,12 +18,12 @@ export const fetchWithAuth = async (
   };
 
   // First attempt
-  let response = await fetch(`${BASE_URL}${url}`, config);
+  let response = await fetch(url, config);
 
-  // If access token expired / missing
+  // If access token expired, try refreshing via internal route handler
   if (response.status === 401) {
     try {
-      const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
+      const refreshRes = await fetch('/api/auth/refresh', {
         method: 'POST',
         credentials: 'include'
       });
@@ -40,21 +33,8 @@ export const fetchWithAuth = async (
         return response;
       }
 
-      const {accessToken: newAccessToken} = await refreshRes.json();
-
-      const retryConfig: RequestInit = {
-        ...config,
-        headers: {
-          ...headers,
-          Authorization: `Bearer ${newAccessToken}`
-        }
-      };
-
-      // Retry ORIGINAL request with new token
-      response = await fetch(`${BASE_URL}${url}`, retryConfig);
-
-      // optionally expose new token to caller
-      (response as any).newAccessToken = newAccessToken;
+      // Retry — the refresh route set a new accessToken cookie
+      response = await fetch(url, config);
     } catch {
       if (dispatch && logoutAction) dispatch(logoutAction());
     }
