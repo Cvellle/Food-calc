@@ -1,9 +1,10 @@
 'use client';
 
-import {useEffect, useState} from 'react';
-import {createMealAsync} from '@/services/meal.service';
+import {useState} from 'react';
 import {useTranslations} from 'next-intl';
 import {ItemCombobox} from '@/components/ItemCombobox';
+import {useItems} from '@/lib/features/items/use-items';
+import {useCreateMeal} from '@/lib/features/meals/use-meals';
 
 type Item = {
   itemId: number | '';
@@ -11,40 +12,17 @@ type Item = {
   measurement: 'grams' | 'unit';
 };
 
-type SelectItem = {
-  id: string | number;
-  name: string;
-  category?: string;
-};
-
 export default function CreateMealPage() {
   const [name, setName] = useState('');
   const [items, setItems] = useState<Item[]>([
     {itemId: '', quantity: '', measurement: 'grams'}
   ]);
-  const [selectItems, setSelectItems] = useState<SelectItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const t = useTranslations('CreateMeal');
 
-  useEffect(() => {
-    const getItems = async () => {
-      try {
-        const res = await fetch('/api/items');
-        if (!res.ok) throw new Error('Failed');
-        const list = await res.json();
-        setSelectItems(list);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('Unknown get items error');
-        }
-      }
-    };
-    getItems();
-  }, []);
+  const {data: selectItems = []} = useItems();
+  const createMeal = useCreateMeal();
 
   function handleItemChange(index: number, field: keyof Item, value: any) {
     const newItems: Item[] = [...items];
@@ -76,28 +54,24 @@ export default function CreateMealPage() {
       }
     }
 
-    setLoading(true);
     try {
-      const payload = {
+      await createMeal.mutateAsync({
         name,
         items: items.map(({itemId, quantity, measurement}) => ({
           itemId: Number(itemId),
           quantity: Number(quantity),
           measurement
         }))
-      };
-      createMealAsync(payload);
-      setSuccess(`Meal sucessfully created`);
+      });
+      setSuccess('Meal successfully created');
       setName('');
       setItems([{itemId: '', quantity: '', measurement: 'grams'}]);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Error getting the meal');
+        setError('Error creating the meal');
       }
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -198,10 +172,10 @@ export default function CreateMealPage() {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={createMeal.isPending}
           className="w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700 disabled:opacity-50"
         >
-          {loading ? 'Creating...' : t('createMeal')}
+          {createMeal.isPending ? 'Creating...' : t('createMeal')}
         </button>
       </form>
     </div>

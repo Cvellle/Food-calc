@@ -6,7 +6,7 @@ import {AuthCard} from '@/components/AuthCard';
 import {Input} from '@/components/Input';
 import {Button} from '@/components/Button';
 import Link from 'next/link';
-import {registerAction} from '@/lib/actions/auth';
+import {registerAction} from '@/lib/features/auth/auth-actions';
 
 export default function RegisterPage() {
   const router = useRouter();

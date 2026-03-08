@@ -1,51 +1,39 @@
 'use client';
 
 import {useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {useRouter} from 'next/navigation';
 import {AuthCard} from '@/components/AuthCard';
 import {Input} from '@/components/Input';
 import {Button} from '@/components/Button';
 import Link from 'next/link';
-import {loginAction} from '@/lib/actions/auth';
-import {fetchCurrentUser} from '@/lib/features/auth/authSlice';
-import {AppDispatch} from '@/lib/store';
+import {useLogin} from '@/lib/features/auth/use-auth';
 
 export default function LoginPage() {
-  const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const loginMutation = useLogin();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
-    try {
-      const form = new FormData(e.currentTarget);
-      const result = await loginAction(
-        form.get('email') as string,
-        form.get('password') as string
-      );
+    const form = new FormData(e.currentTarget);
+    const result = await loginMutation.mutateAsync({
+      email: form.get('email') as string,
+      password: form.get('password') as string
+    });
 
-      if (!result.success) {
-        setError(result.error ?? 'Login failed');
-        return;
-      }
-
-      await dispatch(fetchCurrentUser());
-      setSuccess(true);
-      setTimeout(() => {
-        router.push('/');
-        router.refresh();
-      }, 1500);
-    } catch {
-      setError('Unexpected error. Please try again.');
-    } finally {
-      setLoading(false);
+    if (!result.success) {
+      setError(result.error ?? 'Login failed');
+      return;
     }
+
+    setSuccess(true);
+    setTimeout(() => {
+      router.push('/');
+      router.refresh();
+    }, 1500);
   }
 
   return (
@@ -60,8 +48,8 @@ export default function LoginPage() {
               placeholder="Password"
               required
             />
-            <Button disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+            <Button disabled={loginMutation.isPending}>
+              {loginMutation.isPending ? 'Logging in...' : 'Login'}
             </Button>
           </form>
 

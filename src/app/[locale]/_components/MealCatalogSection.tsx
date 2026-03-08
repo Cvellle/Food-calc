@@ -1,26 +1,20 @@
 'use client';
 
-import {useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '@/lib/hooks';
-import {fetchMeals} from '@/lib/features/meals/mealsThunks';
-import {selectSelectedDate} from '@/lib/features/meals/DailyMealsSlice';
-import {useAddMealToDayMutation} from '@/lib/features/meals/dailyMealsApi';
+import {useState} from 'react';
+import {useMeals} from '@/lib/features/meals/use-meals';
+import {useSelectedDate} from '@/lib/features/daily-meals/use-daily-meals';
+import {useAddMealToDay} from '@/lib/features/daily-meals/use-daily-meals';
 import {useTranslations} from 'next-intl';
 import {MealCard} from './MealCard';
 
 export function MealCatalogSection() {
-  const dispatch = useAppDispatch();
   const t = useTranslations();
 
-  const {list, status, error} = useAppSelector((state) => state.meals);
-  const selectedDateISO = useAppSelector(selectSelectedDate);
+  const {data: list = [], isLoading, error} = useMeals();
+  const {data: selectedDateISO = new Date().toISOString()} = useSelectedDate();
   const [search, setSearch] = useState('');
 
-  const [addMealToDay] = useAddMealToDayMutation();
-
-  useEffect(() => {
-    dispatch(fetchMeals());
-  }, [dispatch]);
+  const addMealToDay = useAddMealToDay();
 
   const labels = {
     name: t('MealCard.name'),
@@ -30,11 +24,11 @@ export function MealCatalogSection() {
   };
 
   const handleAdd = (mealId: string) => {
-    addMealToDay({mealId, date: new Date(selectedDateISO).toISOString()});
+    addMealToDay.mutate({mealId, date: new Date(selectedDateISO).toISOString()});
   };
 
-  if (status === 'loading') return <p>Loading…</p>;
-  if (status === 'failed') return <p>{error}</p>;
+  if (isLoading) return <p>Loading…</p>;
+  if (error) return <p>{error.message}</p>;
 
   const filtered = list.filter((m) =>
     m.name.toLowerCase().includes(search.toLowerCase())

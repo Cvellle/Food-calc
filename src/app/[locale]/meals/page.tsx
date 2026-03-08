@@ -1,24 +1,16 @@
 'use client';
 
-import {useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '@/lib/hooks';
-import {fetchMeals} from '@/lib/features/meals/mealsThunks';
+import {useState} from 'react';
+import {useMeals} from '@/lib/features/meals/use-meals';
 import {useRouter} from 'next/navigation';
 
 export default function MealsPage() {
-  const dispatch = useAppDispatch();
   const router = useRouter();
-  const {list, status, error} = useAppSelector((state) => state.meals);
+  const {data: list = [], isLoading, error} = useMeals();
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchMeals());
-    }
-  }, [dispatch, status]);
-
-  if (status === 'loading') return <p>Loading meals…</p>;
-  if (status === 'failed') return <p>Error: {error}</p>;
+  if (isLoading) return <p>Loading meals…</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   const filtered = list.filter((m) =>
     m.name.toLowerCase().includes(search.toLowerCase())

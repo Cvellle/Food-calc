@@ -1,15 +1,12 @@
 'use client';
 
 import {useMemo} from 'react';
-import {useAppDispatch, useAppSelector} from '@/lib/hooks';
 import {
-  selectSelectedDate,
-  setSelectedDate
-} from '@/lib/features/meals/DailyMealsSlice';
-import {
-  useAllMealsQuery,
-  useRemoveMealFromDayMutation
-} from '@/lib/features/meals/dailyMealsApi';
+  useDailyMeals,
+  useSelectedDate,
+  useSetSelectedDate,
+  useRemoveMealFromDay
+} from '@/lib/features/daily-meals/use-daily-meals';
 import {useTranslations} from 'next-intl';
 import {isSameDay, format} from 'date-fns';
 import {MyDayPicker} from '@/components/Calandar/MyDayPicker';
@@ -19,12 +16,12 @@ import MyChart from '@/components/chart/MyChart';
 import type {NutrientEntry} from '@/lib/nutrition/types';
 
 export function DailyTrackerSection() {
-  const dispatch = useAppDispatch();
   const t = useTranslations();
 
-  const selectedDateISO = useAppSelector(selectSelectedDate);
-  const {data: allMeals = []} = useAllMealsQuery();
-  const [removeMealFromDay] = useRemoveMealFromDayMutation();
+  const {data: allMeals = []} = useDailyMeals();
+  const {data: selectedDateISO = new Date().toISOString()} = useSelectedDate();
+  const setSelectedDate = useSetSelectedDate();
+  const removeMutation = useRemoveMealFromDay();
 
   const date = new Date(selectedDateISO);
 
@@ -54,7 +51,7 @@ export function DailyTrackerSection() {
   }, [filteredMeals]);
 
   const handleDateChange = (value: Date | undefined) => {
-    if (value) dispatch(setSelectedDate(value.toISOString()));
+    if (value) setSelectedDate(value);
   };
 
   return (
@@ -68,7 +65,7 @@ export function DailyTrackerSection() {
           {format(date, 'dd.MM.yyyy')}
           <DailyMealsList
             meals={filteredMeals}
-            onRemove={(index) => removeMealFromDay(index)}
+            onRemove={(index) => removeMutation.mutate(index)}
             title={t('DailyMeals.title')}
           />
         </div>

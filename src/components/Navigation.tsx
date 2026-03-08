@@ -4,16 +4,7 @@ import {useState, useRef, useEffect} from 'react';
 import Link from 'next/link';
 import LocaleSwitcher from './LocaleSwitcher';
 import {useTranslations} from 'next-intl';
-import {endpoint} from '../../config/endpoint';
-import {
-  fetchCurrentUser,
-  logout,
-  selectCurrentUser,
-  selectIsAuthenticated
-} from '@/lib/features/auth/authSlice';
-
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch} from '@/lib/store';
+import {useCurrentUser, useLogout} from '@/lib/features/auth/use-auth';
 
 type NavLink = {type: 'link'; label: string; href: string};
 type NavDropdown = {
@@ -28,9 +19,9 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const dispatch: AppDispatch = useDispatch();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const currentUser = useSelector(selectCurrentUser);
+  const {data: currentUser} = useCurrentUser();
+  const logoutMutation = useLogout();
+  const isAuthenticated = !!currentUser;
 
   const t = useTranslations('Navigation');
 
@@ -46,21 +37,13 @@ export default function Navbar() {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(null);
     }
     document.addEventListener('mousedown', handleClick);
-    dispatch(fetchCurrentUser());
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
   const handleLogout = async () => {
-    await fetch(`${endpoint}/auth/logout`, {
-      method: 'POST',
-      credentials: 'include'
-    });
-    dispatch(logout());
+    await logoutMutation.mutateAsync();
     setMobileOpen(false);
   };
-
-  const toggle = (key: string) =>
-    setOpen((prev) => (prev === key ? null : key));
 
   const UserAvatar = () => (
     <div className="flex items-center gap-2">

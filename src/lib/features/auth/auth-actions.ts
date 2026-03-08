@@ -5,13 +5,21 @@ import bcrypt from 'bcryptjs';
 import {eq} from 'drizzle-orm';
 import {db} from '@/lib/db';
 import {users} from '@/lib/db/schema';
-import {signAccessToken, signRefreshToken} from '@/lib/auth/jwt';
+import {signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken} from '@/lib/auth/jwt';
 
-export interface AuthResult {
+export type AuthResult = {
   success: boolean;
   error?: string;
   user?: {id: number; name: string; email: string; roles: unknown};
-}
+};
+
+export type CurrentUser = {
+  id: number;
+  name: string;
+  email: string;
+  roles: Record<string, number> | null;
+  profile_image: unknown;
+};
 
 export async function loginAction(
   email: string,
@@ -89,4 +97,52 @@ export async function registerAction(
     console.error('[registerAction]', err);
     return {success: false, error: 'Something went wrong. Please try again.'};
   }
+}
+
+export async function getCurrentUser(): Promise<CurrentUser | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('accessToken')?.value;
+
+  if (!token) return null;
+
+  try {
+    const payload = verifyAccessToken(token);
+    const [user] = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        roles: users.roles,
+        profile_image: users.profile_image
+      })
+      .from(users)
+      .where(eq(users.id, payload.sub));
+
+    return user ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function logoutAction(): Promise<{success: boolean}> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('refreshToken')?.value;
+
+  if (token) {
+    try {
+      const payload = verifyRefreshToken(token);
+      await db
+        .update(users)
+        .set({refresh_token: null})
+        .where(eq(users.id, payload.sub))
+        .catch(() => null);
+    } catch {
+      // ignore invalid token on logout
+    }
+  }
+
+  cookieStore.delete('accessToken');
+  cookieStore.delete('refreshToken');
+
+  return {success: true};
 }
